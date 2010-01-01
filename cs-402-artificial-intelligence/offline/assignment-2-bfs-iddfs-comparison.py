@@ -61,7 +61,7 @@ def t12(current):
 # transfer from jug 2 to jug 1
 def t21(current):
     global jug1_cap
-    if current[0] < jug1_cap and current[1] > 0:                                       # if first jug is not full and second jug is not empty
+    if current[0] < jug1_cap and current[1] > 0:                                # if first jug is not full and second jug is not empty
         availble = jug1_cap - current[0]
         if current[1] >= availble: return jug1_cap, current[1] - availble
         else: return current[0] + current[1], 0            
@@ -143,19 +143,26 @@ def bfs(queue, search):
     
     # DEBUG
     #pprint(color)
-    
+        
 #  recursive definition for iddfs
 def iddfs(pair, depth, search):
     global found, color, ancestor
     
     node = pair[0]; parent = pair[1]                                            # seperate node and parent
     
-    if node == None: return                                                     # base case
+    # DEBUG
+    # print 'IDDFS called for  node', node
+    
+    if node == None: return                                                     # base case, if called for empty node, just return
+    if node in ancestor.keys():                                                 # check if the node can appear more close to the root, if so, return
+        if ancestor[node] != parent: return            
     
     # DEBUG
     # print 'Visiting node', node, ', Depth', depth
     
-    color[node] = 'gray'; ancestor[node] = parent                               # paint it gray and push it in ancestor list
+    color[node] = 'gray';                                                       # paint it gray and push it in ancestor list
+    if node not in ancestor.keys(): ancestor[node] = parent                     # do not overwrite if the node appers in lower level
+    
     calc_max_grey('iddfs')                                                      # calculation for space complexity
                                                                                 # superfluous
     
@@ -164,8 +171,13 @@ def iddfs(pair, depth, search):
     if depth == 0: color[node] = 'black'; return                                # if depth is 0, prematurely set the node to black and return
     
     adjacent = get_next_state(node)                                             # get adjacent nodes
-    for x in adjacent:                                                          # only add newly discovered nodes and mark them as white
-        if x not in color.keys(): color[x] = 'white'
+    for x in adjacent:                                                          
+        if x not in color.keys(): color[x] = 'white'                            # only add newly discovered nodes and mark them as white
+        if x not in ancestor.keys(): ancestor[x] = node                         # insert in ancestor list
+    
+    # DEBUG
+    # print '###DEBUG###'; print 'Depth:', depth, 'Node:', node; print 'Color nodes are'; pprint(color)
+    # print 'Adjacent nodes are:'; pprint(adjacent)
     
     for x in adjacent:                                                          # only visit the white nodes
         if color[x] == 'white' and not found: iddfs((x, node), depth - 1, search)
@@ -173,15 +185,16 @@ def iddfs(pair, depth, search):
         
     color[node] = 'black'                                                       # paint it black
     
-    #color.pop(node)
+    # color.pop(node)
     # DEBUG
-    #print '###DEBUG###'; print 'Depth:', depth, 'Node:', node; pprint(color)
+    # print '###DEBUG###'; print 'Depth:', depth, 'Node:', node; pprint(color)
 
 # main program
 if __name__ == "__main__":
     # DEBUG
-    #a, b, c, d = 5, 2, 5, 1
-    a, b, c, d = 0, 0, 4, 0
+    # a, b, c, d = 5, 2, 5, 1
+    # a, b, c, d = 0, 0, 4, 0
+    a, b, c, d = 5, 0, 0, 1
     
     #input = raw_input('Insert the starting node e.g. 0 0 for (0, 0): ').strip().split(' ')
     #a = int(input[0]); b = int(input[1])
@@ -204,7 +217,7 @@ if __name__ == "__main__":
     print 'Finding solution using IDDFS'
     for i in range(0, 10):
         # DEBUG
-        # print 'Trying for depth: ', i
+        # print '---Trying for depth: ', i
         
         color = {}; ancestor = {}; found = False                                # reset coloring and ancestor list in every loop
         
