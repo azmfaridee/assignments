@@ -172,7 +172,7 @@ def iddfs(pair, depth, search):
 # main program
 if __name__ == "__main__":
     # DEBUG
-    a, b, c, d = 5, 0, 0, 1
+    a, b, c, d = 5, 2, 5, 1
     
     #input = raw_input('Insert the starting node e.g. 0 0 for (0, 0): ').strip().split(' ')
     #a = int(input[0]); b = int(input[1])
