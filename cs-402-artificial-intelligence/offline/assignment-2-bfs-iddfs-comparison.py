@@ -21,6 +21,10 @@ found = False
 iddfs_total_nodes_visited = 0
 iddfs_nodes_in_memory = 0
 
+# jug capacities
+jug1_cap = 5
+jug2_cap = 2
+
 # adjacent finding functions
 # empty jug 1
 def e1(current):
@@ -34,28 +38,32 @@ def e2(current):
 
 # fill jug 1
 def f1(current):
-    if current[0] < 5: return 5, current[1]
+    global jug1_cap
+    if current[0] < jug1_cap: return jug1_cap, current[1]
     return None
 
 # fill jug 1
 def f2(current):
-    if current[1] < 2: return current[0], 2
+    global jug2_cap
+    if current[1] < jug2_cap: return current[0], jug2_cap
     return None
 
 # transfer from jug 1 to jug 2
 def t12(current):
-    if current[1] < 2 and current[0] > 0:                                       # reset coloring and ancestor list in every loop
-        available = 2 - current[1]                                              # water to be transferred to jug 2
-        if current[0] >= available: return current[0] - available, 2            # if this amount can be got from jug 1
+    global jug2_cap
+    if current[1] < jug2_cap and current[0] > 0:                                # reset coloring and ancestor list in every loop
+        available = jug2_cap - current[1]                                       # water to be transferred to jug 2
+        if current[0] >= available: return current[0] - available, jug2_cap     # if this amount can be got from jug 1
         else: return 0, current[0] + current[1]                                 # jug 1 was less than what can be filled in jug 2,
                                                                                 # so just pass only what it can supply
     return None
 
 # transfer from jug 2 to jug 1
 def t21(current):
-    if current[0] < 5 and current[1] > 0:                                       # if first jug is not full and second jug is not empty
-        availble = 5 - current[0]
-        if current[1] >= availble: return 5, current[1] - availble
+    global jug1_cap
+    if current[0] < jug1_cap and current[1] > 0:                                       # if first jug is not full and second jug is not empty
+        availble = jug1_cap - current[0]
+        if current[1] >= availble: return jug1_cap, current[1] - availble
         else: return current[0] + current[1], 0            
     return None
 
@@ -172,7 +180,8 @@ def iddfs(pair, depth, search):
 # main program
 if __name__ == "__main__":
     # DEBUG
-    a, b, c, d = 5, 2, 5, 1
+    #a, b, c, d = 5, 2, 5, 1
+    a, b, c, d = 0, 0, 4, 0
     
     #input = raw_input('Insert the starting node e.g. 0 0 for (0, 0): ').strip().split(' ')
     #a = int(input[0]); b = int(input[1])
