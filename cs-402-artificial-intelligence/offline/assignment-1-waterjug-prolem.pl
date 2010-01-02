@@ -77,6 +77,7 @@ t12(X,List,Output):-
 	Output=List.
 
 % tansfer from jug 2 to jug 1
+% when jug 2 has more data than what can be transferred
 t21(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
@@ -86,7 +87,8 @@ t21(X,List,Output):-
 	NewB is B-AvailableInA,
 	NewPrevious = [State|Previous],
 	\+member([5,NewB],NewPrevious),
-	Output = [[[5,NewB],NewPrevious]|List].	
+	Output = [[[5,NewB],NewPrevious]|List].
+% when jug 2 has less data than what can be transferred
 t21(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
@@ -100,9 +102,10 @@ t21(X,List,Output):-
 t21(X,List,Output):-
 	Output=List.
 	
-
+% base case
 bfsvisit([],Goal).
-
+% main definition
+% if we have not reached the goal
 bfsvisit(Queue,Goal):-
 	[X|QueueTemp] = Queue,
 	
@@ -121,7 +124,8 @@ bfsvisit(Queue,Goal):-
 	append(QueueTemp,Decendent6,NextQueue),
 	bfsvisit(NextQueue,Goal).
 	
-	
+% if we have reached the goal, i think the State == Goal is
+% superfluous
 bfsvisit(Queue,Goal):-
 	[X|QueueTemp] = Queue,
 	[State,Previous|_]=X,
@@ -130,6 +134,7 @@ bfsvisit(Queue,Goal):-
 	printList([X]),
 	nl.
 
+% two type of the main calling function
 bfs(A, B, C, D):-
 	bfsvisit([ [[A,B],[]] ],[C,D]).
 bfs(X, Y):-
@@ -137,7 +142,7 @@ bfs(X, Y):-
 	[C, D|_] = Y,
 	bfsvisit([ [[A,B],[]] ],[C,D]).
 	
-	
+% take action just writes the node in stdout	
 takeaction(X):-
 	[State,Previous|_]=X,
 	reverse(Previous, RightPrevious),
