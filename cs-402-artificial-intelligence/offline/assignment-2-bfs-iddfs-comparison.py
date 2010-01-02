@@ -125,7 +125,7 @@ def bfs(queue, search):
     # print 'Visiting node', front
     
     color[node] = 'gray'; ancestor[node] = parent;                              # paint it gray and push it in ancestor list
-    calc_max_grey('bfs')                                                 # update memory complexity calculation,
+    calc_max_grey('bfs')                                                        # update memory complexity calculation,
                                                                                 # superfluous
     
     adjacent = get_next_state(node)                                             # get adjacent nodes
