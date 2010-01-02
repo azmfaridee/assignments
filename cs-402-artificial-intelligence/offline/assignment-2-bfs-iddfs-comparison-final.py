@@ -71,8 +71,6 @@ def t21(current):
 # EXPERIMENT: lambda function :)
 get_next_state = lambda current: filter(None, (e1(current), e2(current), f1(current), f2(current), t12(current), t21(current)))
 
-#print_bfs()
-
 # path printing function
 def print_path(ancestor, search):
     global iddfs_nodes_in_memory, bfs_nodes_in_memory, color
@@ -82,16 +80,11 @@ def print_path(ancestor, search):
         if ancestor[search] == None: break
         path.append(ancestor[search])
         search = ancestor[search]
-    path.reverse()                                                              # the path is discovered from child to root, we need to
-                                                                                # reverse this path
+    # the path is discovered from child to root, we need to reverse this path
+    path.reverse()
+                                                                                
     print 'Solution:' , path
-    
-    # DEBUG
-    # print '###DEBUG###'; pprint(color)
-    
-    # alternate (and better)  way of computing memory complexity, just check the grey noded after finding the solution
-    # total nodes in memory is the number of current 'gray' nodes
-    # bfs_nodes_in_memory = iddfs_nodes_in_memory = len(filter(lambda value: value == 'gray', color.values()))
+
     
 # helper function to search x, the first element in a nested queue
 def not_in(x, queue):
@@ -102,15 +95,11 @@ def not_in(x, queue):
 # memory complexity calculating function, personally I think calculating memory complexity
 # at the end after finding the the solution will suffice as the solution is found at the highest
 # depth, that one will obviously be the maximum
-def calc_max_grey(type, queue = None):
+def update_space_complexity(type, queue = None):
     global color, bfs_nodes_in_memory, iddfs_nodes_in_memory
-    num_gray_nodes = len(filter(lambda value: value == 'gray', color.values()))
     
     if type == 'bfs':
-        #if bfs_nodes_in_memory < num_gray_nodes: bfs_nodes_in_memory = num_gray_nodes
         if bfs_nodes_in_memory < len(queue): bfs_nodes_in_memory = len(queue)
-    elif type == 'iddfs':
-        if iddfs_nodes_in_memory < num_gray_nodes: iddfs_nodes_in_memory = num_gray_nodes
 
 # recursive definition for bfs
 def bfs(queue, search):
@@ -128,7 +117,9 @@ def bfs(queue, search):
     # print 'Visiting node', front
     
     # update memory complexity calculation,
-    calc_max_grey('bfs', queue)
+    update_space_complexity('bfs', queue)
+    
+    # update the ancestor dictionary
     if node not in ancestor.keys():
         ancestor[node] = parent
     
@@ -144,67 +135,60 @@ def bfs(queue, search):
     # if node is found, print path and end the recursion
     if node == search: print_path(ancestor, search); found = True; return                
     
-    bfs(queue, search)                                                          # recursive call
+    # recursive call
+    bfs(queue, search)                                                          
 
 #  recursive definition for iddfs
 def iddfs(pair, depth, search):
-    global found, color, ancestor
-    global iddfs_total_nodes_visited
-    global iddfs_nodes_in_memory
+    global found, color, ancestor, iddfs_total_nodes_visited, iddfs_nodes_in_memory
     
-    node = pair[0]; parent = pair[1]                                            # seperate node and parent
+    # seperate node and parent
+    node = pair[0]; parent = pair[1]                                            
     
     # DEBUG
     #print 'IDDFS called for  node', node
+    
+    # FIXME: memory complexity computation is wrong
     iddfs_total_nodes_visited += 1
     iddfs_nodes_in_memory += 1
     
-    if node == None: return                                                     # base case, if called for empty node, just return
-    #if node in ancestor.keys():                                                 # check if the node can appear more close to the root, if so, return
-    #    if ancestor[node] != parent: return            
+    # base case, if called for empty node, just return
+    if node == None: return
     
     # DEBUG
     # print 'Visiting node', node, ', Depth', depth
     
-    #color[node] = 'gray';                                                       # paint it gray and push it in ancestor list
-    if node not in ancestor.keys(): ancestor[node] = parent                     # do not overwrite if the node appers in lower level
+    # do not overwrite by the same node appering in lower level
+    if node not in ancestor.keys(): ancestor[node] = parent                     
+
+    # FIXME    
+    # calculation for space complexity, the following line is deprected
+    # update_space_complexity('iddfs')
     
-    calc_max_grey('iddfs')                                                      # calculation for space complexity
-                                                                                # superfluous
+    # if found, print the path and premature return
+    if node == search: found = True; print_path(ancestor, search); return
     
-    if node == search:
-        print '###', node, 'found'
-        found = True;
-        #print ancestor
-        print_path(ancestor, search);
-        return       # if found, print the path and premature return
-    
-    if depth == 0:
-        color[node] = 'black';
-        return                                # if depth is 0, prematurely set the node to black and return
-    
-    adjacent = get_next_state(node)                                             # get adjacent nodes
+    # if depth is 0, prematurely return
+    if depth == 0: return
+        
+    # get adjacent nodes
+    adjacent = get_next_state(node)
+    # insert adjacent nodes and their parent in ancestor list
     for x in adjacent:                                                          
-        if x not in color.keys():
-            #color[x] = 'white'                            # only add newly discovered nodes and mark them as white
-            pass
-        if x not in ancestor.keys(): ancestor[x] = node                         # insert in ancestor list
+        if x not in ancestor.keys(): ancestor[x] = node                         
     
     # DEBUG
     # print '###DEBUG###'; print 'Depth:', depth, 'Node:', node; print 'Color nodes are'; pprint(color)
     # print 'Adjacent nodes are:'; pprint(adjacent)
     
-    for x in adjacent:                                                          # only visit the white nodes
+    # only visit the white nodes
+    for x in adjacent:
         if not found: iddfs((x, node), depth - 1, search)
-        #if color[x] == 'white' and not found: iddfs((x, node), depth - 1, search)
-        if found: break                                                         # after returning from child's recursion, see if found, then break
-    
-    #iddfs_nodes_in_memory += 1    
-    #color[node] = 'black'                                                       # paint it black
-    
-    # color.pop(node)
-    # DEBUG
-    # print '###DEBUG###'; print 'Depth:', depth, 'Node:', node; pprint(color)
+	# after returning from child's recursion, see if found, then break
+	if found: break
+	
+    # we can safely detelte the current node, so decrease the node count 
+    iddfs_nodes_in_memory -= 1
 
 # main program
 if __name__ == "__main__":
@@ -222,7 +206,6 @@ if __name__ == "__main__":
     print 'Finding solution using BFS'
     color = {}; ancestor = {}; found = False
     bfs([((a, b), None)], (c, d))
-    #bfs([(a, b)], (c, d))
     # total nodes visited is the count of total 'gray' and 'black' nodes
     bfs_total_nodes_visited += len(filter(lambda value: value == 'gray' or value == 'black', color.values()))
     if not found: print ':( No Soultion found :('
@@ -233,17 +216,20 @@ if __name__ == "__main__":
     print
     
     print 'Finding solution using IDDFS'
+    iddfs_total_nodes_visited = 0
     for i in range(0, 10):
         # DEBUG
-        print '---Trying for depth: ', i
+        #print '---Trying for depth: ', i
         
-        color = {}; ancestor = {}; found = False                                # reset coloring and ancestor list in every loop
+	# reset coloring and ancestor list in every loop
+        color = {}; ancestor = {}; found = False                                
         iddfs_nodes_in_memory = 0
         
-        iddfs(((a, b), None), i, (c, d))                                        # iddfs calling
+	# iddfs calling
+        iddfs(((a, b), None), i, (c, d))                                        
         #iddfs_total_nodes_visited += len(filter(lambda value: value == 'gray' or value == 'black', color.values()))
         if found: break
-        else: pass; print 'No solution for depth', i
+        else: pass; #print 'No solution for depth', i
     
     if not found: print ':( No Soultion found :('
     else:
