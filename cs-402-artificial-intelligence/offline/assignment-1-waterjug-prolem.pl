@@ -6,6 +6,7 @@ member(Index, SearchFor, [_|Tail]) :-
 	member(Previous, SearchFor, Tail),
 	Index is Previous + 1.
 
+% fill up jug 1
 f1(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
@@ -16,7 +17,7 @@ f1(X,List,Output):-
 f1(X,List,Output):-
 	Output=List.
 
-
+% fill up jug 2
 f2(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
@@ -27,7 +28,7 @@ f2(X,List,Output):-
 f2(X,List,Output):-
 	Output=List.
 
-
+% empty jug 1
 e1(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
@@ -38,7 +39,7 @@ e1(X,List,Output):-
 e1(X,List,Output):-
 	Output=List.
 
-
+% empty jug 2
 e2(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
@@ -49,24 +50,25 @@ e2(X,List,Output):-
 e2(X,List,Output):-
 	Output=List.
 
-
+% transfer from jug 1 to jug 2
+% when jug 1 has more water than what can be transferred
 t12(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
-	Bneed is 2-B,
+	AvailableInB is 2-B,
 	A>0,
-	A>=Bneed,
-	Aa is A-Bneed,
+	A>=AvailableInB,
+	Aa is A-AvailableInB,
 	NewPrevious = [State|Previous],
 	\+member([Aa,2],NewPrevious),
 	Output = [[[Aa,2],NewPrevious]|List].
-	
+% jug 1 has less water than what can be transferred 	
 t12(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
-	Bneed is 2-B,
+	AvailableInB is 2-B,
 	A>0,
-	A<Bneed,
+	A<AvailableInB,
 	Bb is B+A,
 	NewPrevious = [State|Previous],
 	\+member([0,Bb],NewPrevious),
@@ -74,23 +76,23 @@ t12(X,List,Output):-
 t12(X,List,Output):-
 	Output=List.
 
-
+% tansfer from jug 2 to jug 1
 t21(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
-	Aneed is 5-A,
+	AvailableInA is 5-A,
 	B>0,
-	B>=Aneed,
-	Bb is B-Aneed,
+	B>=AvailableInA,
+	Bb is B-AvailableInA,
 	NewPrevious = [State|Previous],
 	\+member([5,Bb],NewPrevious),
 	Output = [[[5,Bb],NewPrevious]|List].	
 t21(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
-	Aneed is 5-A,
+	AvailableInA is 5-A,
 	B>0,
-	B<Aneed,
+	B<AvailableInA,
 	Aa is A+B,
 	NewPrevious = [State|Previous],
 	\+member([Aa,0],NewPrevious),
