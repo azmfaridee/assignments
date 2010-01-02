@@ -58,10 +58,10 @@ t12(X,List,Output):-
 	AvailableInB is 2-B,
 	A>0,
 	A>=AvailableInB,
-	Aa is A-AvailableInB,
+	NewA is A-AvailableInB,
 	NewPrevious = [State|Previous],
-	\+member([Aa,2],NewPrevious),
-	Output = [[[Aa,2],NewPrevious]|List].
+	\+member([NewA,2],NewPrevious),
+	Output = [[[NewA,2],NewPrevious]|List].
 % jug 1 has less water than what can be transferred 	
 t12(X,List,Output):-
 	[State,Previous|_]=X,
@@ -69,10 +69,10 @@ t12(X,List,Output):-
 	AvailableInB is 2-B,
 	A>0,
 	A<AvailableInB,
-	Bb is B+A,
+	NewB is B+A,
 	NewPrevious = [State|Previous],
-	\+member([0,Bb],NewPrevious),
-	Output = [[[0,Bb],NewPrevious]|List].
+	\+member([0,NewB],NewPrevious),
+	Output = [[[0,NewB],NewPrevious]|List].
 t12(X,List,Output):-
 	Output=List.
 
@@ -83,20 +83,20 @@ t21(X,List,Output):-
 	AvailableInA is 5-A,
 	B>0,
 	B>=AvailableInA,
-	Bb is B-AvailableInA,
+	NewB is B-AvailableInA,
 	NewPrevious = [State|Previous],
-	\+member([5,Bb],NewPrevious),
-	Output = [[[5,Bb],NewPrevious]|List].	
+	\+member([5,NewB],NewPrevious),
+	Output = [[[5,NewB],NewPrevious]|List].	
 t21(X,List,Output):-
 	[State,Previous|_]=X,
 	[A,B|_] = State,
 	AvailableInA is 5-A,
 	B>0,
 	B<AvailableInA,
-	Aa is A+B,
+	NewA is A+B,
 	NewPrevious = [State|Previous],
-	\+member([Aa,0],NewPrevious),
-	Output = [[[Aa,0],NewPrevious]|List].	
+	\+member([NewA,0],NewPrevious),
+	Output = [[[NewA,0],NewPrevious]|List].	
 t21(X,List,Output):-
 	Output=List.
 	
