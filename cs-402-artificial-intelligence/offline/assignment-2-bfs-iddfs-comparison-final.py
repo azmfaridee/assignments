@@ -114,7 +114,7 @@ def calc_max_grey(type, queue = None):
 
 # recursive definition for bfs
 def bfs(queue, search):
-    global color, ancestor, found, bfs_nodes_in_memory, bfs_total_nodes_visited
+    global ancestor, found, bfs_nodes_in_memory, bfs_total_nodes_visited
     
     if queue == []: return                                                      # base case when queue is empty
     bfs_total_nodes_visited += 1
@@ -123,47 +123,29 @@ def bfs(queue, search):
     # if len(queue) > bfs_nodes_in_memory: bfs_nodes_in_memory = len(queue)
 	
     front = queue.pop(0); node = front[0]; parent = front[1]                    # pop the queue and get node and its parent
-    #node = queue.pop(0)
-    # print 'Visiting', node
     
     # DEBUG
     # print 'Visiting node', front
     
-    #color[node] = 'gray';
-    #ancestor[node] = parent;                              # paint it gray and push it in ancestor list
-    calc_max_grey('bfs', queue)                                                        # update memory complexity calculation,
+    # update memory complexity calculation,
+    calc_max_grey('bfs', queue)
     if node not in ancestor.keys():
         ancestor[node] = parent
-                                                                                # superfluous
     
-    adjacent = get_next_state(node)                                             # get adjacent nodes
-    #for x in adjacent:
-    #    if x not in color.keys(): color[x] = 'white'                            # only add newly discovered nodes and mark them as white
-                                                                                # do not overwrite gray or black nodes
-
+    # get adjacent nodes
+    adjacent = get_next_state(node)
+    
     for x in adjacent:
-        #if color[x] == 'white' and not_in(x, queue): queue.append((x, node))
         if not_in(x, queue): queue.append((x, node))
-        #if x not in queue: queue.append(x)
             
     # DEBUG
-    # print 'Updated queue', queue, 'and visited', visited
-    #print 'Updated queue', queue
+    # print 'Updated queue', queue
     
-    if node == search:
-        print node, 'Found'
-        print_path(ancestor, search);
-        #print ancestor
-        found = True;
-        return       # if node is found, print path and end the recursion
+    # if node is found, print path and end the recursion
+    if node == search: print_path(ancestor, search); found = True; return                
     
     bfs(queue, search)                                                          # recursive call
 
-    #color[node] = 'black'                                                       # when bfs retuns, paint it black
-    
-    # DEBUG
-    #pprint(color)
-        
 #  recursive definition for iddfs
 def iddfs(pair, depth, search):
     global found, color, ancestor
