@@ -100,28 +100,32 @@ def not_in(x, queue):
 # memory complexity calculating function, personally I think calculating memory complexity
 # at the end after finding the the solution will suffice as the solution is found at the highest
 # depth, that one will obviously be the maximum
-def calc_max_grey(type):
+def calc_max_grey(type, queue = None):
     global color, bfs_nodes_in_memory, iddfs_nodes_in_memory
     num_gray_nodes = len(filter(lambda value: value == 'gray', color.values()))
     
     if type == 'bfs':
         if bfs_nodes_in_memory < num_gray_nodes: bfs_nodes_in_memory = num_gray_nodes
+		# if bfs_nodes_in_memory < len(queue): bfs_nodes_in_memory = len(queue)
     elif type == 'iddfs':
         if iddfs_nodes_in_memory < num_gray_nodes: iddfs_nodes_in_memory = num_gray_nodes
 
 # recursive definition for bfs
 def bfs(queue, search):
-    global color, ancestor, found
+    global color, ancestor, found, bfs_nodes_in_memory
     
     if queue == []: return                                                      # base case when queue is empty
     
+	# update the queue length, do it before you pop the node from the queue
+    # if len(queue) > bfs_nodes_in_memory: bfs_nodes_in_memory = len(queue)
+	
     front = queue.pop(0); node = front[0]; parent = front[1]                    # pop the queue and get node and its parent
     
     # DEBUG
     # print 'Visiting node', front
     
     color[node] = 'gray'; ancestor[node] = parent;                              # paint it gray and push it in ancestor list
-    calc_max_grey('bfs')                                                        # update memory complexity calculation,
+    calc_max_grey('bfs')                                                 # update memory complexity calculation,
                                                                                 # superfluous
     
     adjacent = get_next_state(node)                                             # get adjacent nodes
@@ -194,13 +198,13 @@ if __name__ == "__main__":
     # DEBUG
     # a, b, c, d = 5, 2, 5, 1
     # a, b, c, d = 0, 0, 4, 0
-    a, b, c, d = 5, 0, 0, 1
+    # a, b, c, d = 5, 0, 0, 1
     
-    #input = raw_input('Insert the starting node e.g. 0 0 for (0, 0): ').strip().split(' ')
-    #a = int(input[0]); b = int(input[1])
-    #input = raw_input('Insert the ending node e.g. 1 0 for (1, 0): ').strip().split(' ')
-    #c = int(input[0]); d = int(input[1])
-    #print
+    input = raw_input('Insert the starting node e.g. 0 0 for (0, 0): ').strip().split(' ')
+    a = int(input[0]); b = int(input[1])
+    input = raw_input('Insert the ending node e.g. 1 0 for (1, 0): ').strip().split(' ')
+    c = int(input[0]); d = int(input[1])
+    print
     
     print 'Finding solution using BFS'
     color = {}; ancestor = {}; found = False
@@ -209,8 +213,8 @@ if __name__ == "__main__":
     bfs_total_nodes_visited += len(filter(lambda value: value == 'gray' or value == 'black', color.values()))
     if not found: print ':( No Soultion found :('
     else:
-        print 'Total Nodes visited when using BFS:', bfs_total_nodes_visited
-        print 'Nodes in memory when using BFS:', bfs_nodes_in_memory
+        print 'Total Nodes visited (time complexity) when using BFS:', bfs_total_nodes_visited
+        print 'Nodes in memory (memory complexity) when using BFS:', bfs_nodes_in_memory
     
     print
     
@@ -228,5 +232,5 @@ if __name__ == "__main__":
     
     if not found: print ':( No Soultion found :('
     else:
-        print 'Total Nodes visited when using IDDFS:', iddfs_total_nodes_visited
-        print 'Nodes in memory when using IDDFS:', iddfs_nodes_in_memory
+        print 'Total Nodes visited (time complexity) when using IDDFS:', iddfs_total_nodes_visited
+        print 'Nodes in memory (memory complexity) when using IDDFS:', iddfs_nodes_in_memory
