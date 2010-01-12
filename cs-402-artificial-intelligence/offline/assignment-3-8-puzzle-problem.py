@@ -5,6 +5,11 @@ import time
 from pprint import pprint
 
 PUZZLE_SIZE = 3
+MAX_COST_LIMIT = 100
+CHECK_VISITED_ENABLED = False
+DEBUG_MODE = False
+SIMULATION_MODE = False
+
 Infinity = float("inf")
 visited = []
 
@@ -37,54 +42,59 @@ def get_manhattan_distance(current, next):
 		total += abs(x1 - x2) + abs(y1 - y2)
 	return total
 
-def ida_star(startnode, endnode):
-	initial_cost_limit = get_manhattan_distance(startnode, endnode)
-# 	initial_cost_limit = 2
-
-	solution, cost_limit = dfs(startnode, 0, initial_cost_limit, [startnode])
-# 	solution, cost_limit = dfs(startnode, 0, 23, [startnode])
-	if solution != None: return solution, cost_limit
-	if cost_limit == Infinity: return None
-
-def dfs(node, cost_from_root, cost_limit, path):
-	if node not in visited: visited.append(node)
-	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
- 	print 'visited', visited
-	print 'dfs for node', node
-	print 'cost from root', cost_from_root, 'cost limit', cost_limit
-	pprint(path)
-# 	time.sleep(1)
-
-	if minimum_cost > cost_limit: return None, minimum_cost
-	if node == endnode: return path, cost_limit
-
-	next_cost_limit = Infinity
- 	for next_node in get_next_states(node):
- 		if next_node in visited: continue
- 		visited.append(next_node)
-		solution, new_cost_limit = dfs(next_node, cost_from_root + 1, cost_limit, path + [next_node])
-		if solution != None: return solution, new_cost_limit
-		next_cost_limit = min(next_cost_limit, new_cost_limit)
-
-	return None, next_cost_limit
-
 def pretty_print(solution):
-	for node in solution:
+	for nodeindex, node in enumerate(solution):
+		print 'Position:', nodeindex,
 		for index, item in enumerate(node):
 			if index % 3 == 0: print
 			if item == 0: print ' ',
 			else: print item,
 		print
 
+
+def ida_star(startnode, endnode):
+	initial_cost_limit = get_manhattan_distance(startnode, endnode)
+
+	while initial_cost_limit < MAX_COST_LIMIT:
+		solution, cost_limit = dfs(startnode, 0, initial_cost_limit, [startnode])
+		if solution != None: return solution, cost_limit
+		if cost_limit == Infinity: return None
+		initial_cost_limit += 1
+
+def dfs(node, cost_from_root, cost_limit, path):
+	if CHECK_VISITED_ENABLED == True:
+		if node not in visited: visited.append(node)
+	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
+
+	if DEBUG_MODE == True:
+		if CHECK_VISITED_ENABLED == True: print 'visited', visited
+		print 'dfs for node', node
+		print 'cost from root', cost_from_root, 'cost limit', cost_limit
+		pprint(path)
+	if SIMULATION_MODE == True: time.sleep(1)
+
+	if minimum_cost > cost_limit: return None, minimum_cost
+	if node == endnode: return path, cost_limit
+
+	next_cost_limit = Infinity
+ 	for next_node in get_next_states(node):
+ 		if CHECK_VISITED_ENABLED == True:
+	  		if next_node in visited: continue
+		solution, new_cost_limit = dfs(next_node, cost_from_root + 1, cost_limit, path + [next_node])
+		if solution != None: return solution, new_cost_limit
+		next_cost_limit = min(next_cost_limit, new_cost_limit)
+
+	return None, next_cost_limit
+
 if __name__ == '__main__':
 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
 # 	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
-	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
+# 	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
+	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
 # 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-	# b = [8, 1, 2, 3, 4, 5, 6, 7, 0]
 	answer = ida_star(startnode, endnode)
 	if answer != None:
-		print 'Solution found at cost limit', answer[1],
+		print 'Solution found at cost limit', answer[1]
 		pretty_print(answer[0])
-	else: print 'No solution found for the given cost limit,'
+	else: print 'No solution found within maximum cost limit', MAX_COST_LIMIT
