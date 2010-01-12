@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import copy
+from copy import deepcopy
 import time
 from pprint import pprint
 
@@ -21,8 +21,7 @@ def get_next_states(state):
 		newindex = x * PUZZLE_SIZE + y
 		oldindex = state.index(0)
 
-		# without deepcopy there will be a problem
-		newstate = copy.deepcopy(state)
+		newstate = deepcopy(state)
 		newstate[oldindex] = newstate[newindex]
 		newstate[newindex] = 0
 		next_states.append(newstate)
@@ -40,10 +39,12 @@ def get_manhattan_distance(current, next):
 
 def ida_star(startnode, endnode):
 	initial_cost_limit = get_manhattan_distance(startnode, endnode)
+# 	initial_cost_limit = 2
 
 	solution, cost_limit = dfs(startnode, 0, initial_cost_limit, [startnode])
+# 	solution, cost_limit = dfs(startnode, 0, 23, [startnode])
 	if solution != None: return solution, cost_limit
-	if cost_limit == Infinity: return None,
+	if cost_limit == Infinity: return None
 
 def dfs(node, cost_from_root, cost_limit, path):
 	if node not in visited: visited.append(node)
@@ -67,11 +68,23 @@ def dfs(node, cost_from_root, cost_limit, path):
 
 	return None, next_cost_limit
 
+def pretty_print(solution):
+	for node in solution:
+		for index, item in enumerate(node):
+			if index % 3 == 0: print
+			if item == 0: print ' ',
+			else: print item,
+		print
+
 if __name__ == '__main__':
 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
-	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
-	# endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
-	# endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+# 	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
+	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
+# 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
 	# b = [8, 1, 2, 3, 4, 5, 6, 7, 0]
-	ida_star(startnode, endnode)
+	answer = ida_star(startnode, endnode)
+	if answer != None:
+		print 'Solution found at cost limit', answer[1],
+		pretty_print(answer[0])
+	else: print 'No solution found for the given cost limit,'
