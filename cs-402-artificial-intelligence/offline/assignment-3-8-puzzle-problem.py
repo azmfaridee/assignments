@@ -1,13 +1,16 @@
 #!/usr/bin/python
 
 import copy
+import time
 from pprint import pprint
 
 PUZZLE_SIZE = 3
+Infinity = float("inf")
+visited = []
 
 get_2dindex = lambda state, n: (state.index(n) / PUZZLE_SIZE, state.index(n) % PUZZLE_SIZE)
 
-def get_next_2dstates(state):
+def get_next_states(state):
 	next_states = []
 
 	x, y = get_2dindex(state, 0)
@@ -35,12 +38,40 @@ def get_manhattan_distance(current, next):
 		total += abs(x1 - x2) + abs(y1 - y2)
 	return total
 
+def ida_star(startnode, endnode):
+	initial_cost_limit = get_manhattan_distance(startnode, endnode)
+
+	solution, cost_limit = dfs(startnode, 0, initial_cost_limit, [startnode])
+	if solution != None: return solution, cost_limit
+	if cost_limit == Infinity: return None,
+
+def dfs(node, cost_from_root, cost_limit, path):
+	if node not in visited: visited.append(node)
+	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
+ 	print 'visited', visited
+	print 'dfs for node', node
+	print 'cost from root', cost_from_root, 'cost limit', cost_limit
+	pprint(path)
+# 	time.sleep(1)
+
+	if minimum_cost > cost_limit: return None, minimum_cost
+	if node == endnode: return path, cost_limit
+
+	next_cost_limit = Infinity
+ 	for next_node in get_next_states(node):
+ 		if next_node in visited: continue
+ 		visited.append(next_node)
+		solution, new_cost_limit = dfs(next_node, cost_from_root + 1, cost_limit, path + [next_node])
+		if solution != None: return solution, new_cost_limit
+		next_cost_limit = min(next_cost_limit, new_cost_limit)
+
+	return None, next_cost_limit
+
 if __name__ == '__main__':
-	start = [7, 2, 4, 5, 0, 6, 8, 3, 1]
-	end = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-	b = [8, 1, 2, 3, 4, 5, 6, 7, 0]
-# 	pprint(get_next_2dstates(start))
-# 	print get_manhattan_distance(start, end)
-	next_states = get_next_2dstates(start)
-	for x in next_states:
-		pprint(x), pprint(get_manhattan_distance(x, end))
+	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
+	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
+	# endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
+	# endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+
+	# b = [8, 1, 2, 3, 4, 5, 6, 7, 0]
+	ida_star(startnode, endnode)
