@@ -5,8 +5,7 @@ import time
 from pprint import pprint
 
 PUZZLE_SIZE = 3
-MAX_COST_LIMIT = 100
-CHECK_VISITED_ENABLED = False
+MAX_COST_LIMIT = 31
 DEBUG_MODE = False
 SIMULATION_MODE = False
 
@@ -62,12 +61,9 @@ def ida_star(startnode, endnode):
 		initial_cost_limit += 1
 
 def dfs(node, cost_from_root, cost_limit, path):
-	if CHECK_VISITED_ENABLED == True:
-		if node not in visited: visited.append(node)
 	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
 
 	if DEBUG_MODE == True:
-		if CHECK_VISITED_ENABLED == True: print 'visited', visited
 		print 'dfs for node', node
 		print 'cost from root', cost_from_root, 'cost limit', cost_limit
 		pprint(path)
@@ -78,8 +74,6 @@ def dfs(node, cost_from_root, cost_limit, path):
 
 	next_cost_limit = Infinity
  	for next_node in get_next_states(node):
- 		if CHECK_VISITED_ENABLED == True:
-	  		if next_node in visited: continue
 		solution, new_cost_limit = dfs(next_node, cost_from_root + 1, cost_limit, path + [next_node])
 		if solution != None: return solution, new_cost_limit
 		next_cost_limit = min(next_cost_limit, new_cost_limit)
