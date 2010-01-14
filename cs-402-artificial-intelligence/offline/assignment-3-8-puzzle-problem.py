@@ -66,7 +66,8 @@ def dfs(node, cost_from_root, cost_limit, path):
 	if DEBUG_MODE == True:
 		print 'DEBUG: DFS for node: ', node
 		print 'DEBUG: Cost (depth) from root: ', cost_from_root
-		print 'DEBUG: Curent cost limit i.e. f(n): ', cost_limit
+		print 'DEBUG: Parent\'s cost limit:', cost_limit
+		print 'DEBUG: Curent cost limit i.e. f(n): ', minimum_cost
 		print 'DEBUG: Path so far:'; pprint(path)
 	if SIMULATION_MODE == True: time.sleep(1)
 
@@ -74,7 +75,9 @@ def dfs(node, cost_from_root, cost_limit, path):
 	if node == endnode: return path, cost_limit
 
 	next_cost_limit = Infinity
- 	for next_node in get_next_states(node):
+	next_states = get_next_states(node)
+	if DEBUG_MODE == True: print 'DEBUG: Node', node, 'has following child nodes: ', next_states
+ 	for next_node in next_states:
 		solution, new_cost_limit = dfs(next_node, cost_from_root + 1, cost_limit, path + [next_node])
 		if solution != None: return solution, new_cost_limit
 		next_cost_limit = min(next_cost_limit, new_cost_limit)
