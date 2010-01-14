@@ -5,7 +5,7 @@ import time
 from pprint import pprint
 
 PUZZLE_SIZE = 3
-MAX_COST_LIMIT = 31
+MAX_cost_cutoff = 31
 DEBUG_MODE = True
 SIMULATION_MODE = False
 
@@ -52,37 +52,37 @@ def pretty_print(solution):
 
 
 def ida_star(startnode, endnode):
-	initial_cost_limit = get_manhattan_distance(startnode, endnode)
+	initial_cost_cutoff = get_manhattan_distance(startnode, endnode)
 
-	while initial_cost_limit < MAX_COST_LIMIT:
-		solution, cost_limit = dfs(startnode, 0, initial_cost_limit, [startnode])
-		if solution != None: return solution, cost_limit
-		if cost_limit == Infinity: return None
-		initial_cost_limit += 1
+	while initial_cost_cutoff < MAX_cost_cutoff:
+		solution, cost_cutoff = dfs(startnode, 0, initial_cost_cutoff, [startnode])
+		if solution != None: return solution, cost_cutoff
+		if cost_cutoff == Infinity: return None
+		initial_cost_cutoff += 1
 
-def dfs(node, cost_from_root, cost_limit, path):
+def dfs(node, cost_from_root, cost_cutoff, path):
 	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
 
 	if DEBUG_MODE == True:
 		print 'DEBUG: DFS for node: ', node
 		print 'DEBUG: Cost (depth) from root: ', cost_from_root
-		print 'DEBUG: Parent\'s cost limit:', cost_limit
+		print 'DEBUG: Parent\'s cost limit:', cost_cutoff
 		print 'DEBUG: Curent cost limit i.e. f(n): ', minimum_cost
 		print 'DEBUG: Path so far:'; pprint(path)
 	if SIMULATION_MODE == True: time.sleep(1)
 
-	if minimum_cost > cost_limit: return None, minimum_cost
-	if node == endnode: return path, cost_limit
+	if minimum_cost > cost_cutoff: return None, minimum_cost
+	if node == endnode: return path, cost_cutoff
 
-	next_cost_limit = Infinity
+	next_cost_cutoff = Infinity
 	next_states = get_next_states(node)
 	if DEBUG_MODE == True: print 'DEBUG: Node', node, 'has following child nodes: ', next_states
  	for next_node in next_states:
-		solution, new_cost_limit = dfs(next_node, cost_from_root + 1, cost_limit, path + [next_node])
-		if solution != None: return solution, new_cost_limit
-		next_cost_limit = min(next_cost_limit, new_cost_limit)
+		solution, new_cost_cutoff = dfs(next_node, cost_from_root + 1, cost_cutoff, path + [next_node])
+		if solution != None: return solution, new_cost_cutoff
+		next_cost_cutoff = min(next_cost_cutoff, new_cost_cutoff)
 
-	return None, next_cost_limit
+	return None, next_cost_cutoff
 
 if __name__ == '__main__':
 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
@@ -95,4 +95,4 @@ if __name__ == '__main__':
 	if answer != None:
 		print 'Solution found at cost limit', answer[1]
 		pretty_print(answer[0])
-	else: print 'No solution found within maximum cost limit', MAX_COST_LIMIT
+	else: print 'No solution found within maximum cost limit', MAX_cost_cutoff
