@@ -18,8 +18,8 @@ def get_next_states(state):
 	next_states = []
 
 	x, y = get_2dindex(state, 0)
-	next = (x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)
-	next = filter(lambda x: x[0] >= 0 and x[1] >= 0 and x[0] < PUZZLE_SIZE and x[1] < PUZZLE_SIZE, next)
+	next = filter(lambda x: x[0] >= 0 and x[1] >= 0 and x[0] < PUZZLE_SIZE and x[1] < PUZZLE_SIZE,
+			((x, y + 1), (x, y - 1), (x + 1, y), (x - 1, y)))
 
 	for x, y in next:
 		newindex = x * PUZZLE_SIZE + y
