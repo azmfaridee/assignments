@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 from copy import deepcopy
-import time
+from time import sleep
 from pprint import pprint
 
 PUZZLE_SIZE = 3
@@ -69,7 +69,7 @@ def dfs(node, cost_from_root, cost_cutoff, path):
 		print 'DEBUG: Parent\'s cost limit:', cost_cutoff
 		print 'DEBUG: Curent cost limit i.e. f(n): ', minimum_cost
 		print 'DEBUG: Path so far:'; pprint(path)
-	if SIMULATION_MODE == True: time.sleep(1)
+	if SIMULATION_MODE == True: sleep(1)
 
 	if minimum_cost > cost_cutoff: return None, minimum_cost
 	if node == endnode: return path, cost_cutoff
