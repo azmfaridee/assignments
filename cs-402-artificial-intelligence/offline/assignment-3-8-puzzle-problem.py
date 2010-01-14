@@ -6,7 +6,7 @@ from pprint import pprint
 
 PUZZLE_SIZE = 3
 MAX_COST_LIMIT = 31
-DEBUG_MODE = False
+DEBUG_MODE = True
 SIMULATION_MODE = False
 
 Infinity = float("inf")
@@ -64,9 +64,10 @@ def dfs(node, cost_from_root, cost_limit, path):
 	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
 
 	if DEBUG_MODE == True:
-		print 'dfs for node', node
-		print 'cost from root', cost_from_root, 'cost limit', cost_limit
-		pprint(path)
+		print 'DEBUG: DFS for node: ', node
+		print 'DEBUG: Cost (depth) from root: ', cost_from_root
+		print 'DEBUG: Curent cost limit i.e. f(n): ', cost_limit
+		print 'DEBUG: Path so far:'; pprint(path)
 	if SIMULATION_MODE == True: time.sleep(1)
 
 	if minimum_cost > cost_limit: return None, minimum_cost
