@@ -3,16 +3,53 @@
 from copy import deepcopy
 from time import sleep
 from pprint import pprint
+import sys
 
 PUZZLE_SIZE = 3
 MAX_COST_CUTOFF = 31
-DEBUG_MODE = True
+DEBUG_MODE = False
 SIMULATION_MODE = False
 
 Infinity = float("inf")
 visited = []
 
 get_2dindex = lambda state, n: (state.index(n) / PUZZLE_SIZE, state.index(n) % PUZZLE_SIZE)
+
+def get_ordered(node):
+	ordered = []
+	for i in range(0, PUZZLE_SIZE):
+		temp = deepcopy(node[i*PUZZLE_SIZE: (i+1)*PUZZLE_SIZE])
+ 		if i%2 == 1: temp.reverse()
+		ordered += temp
+	ordered.remove(0)
+	return ordered
+
+def get_cycle(startnode, endnode, key, cycle):
+	if key in cycle: return cycle
+	cycle.append(key)
+	if startnode.index(key) == endnode.index(key): return cycle
+	cycle = get_cycle(startnode, endnode, endnode[startnode.index(key)], cycle)
+	return cycle
+
+def check_solvability(startnode, endnode):
+	startnode = get_ordered(startnode)
+	endnode = get_ordered(endnode)
+	cycles = []
+	actual_count = 0
+
+	check = dict(zip(startnode, [False for i in range(0, PUZZLE_SIZE * PUZZLE_SIZE)]))
+	for item in check.keys():
+		if check[item] == False:
+			cycle = get_cycle(startnode, endnode, item, [])
+			if cycle != []:
+				cycles.append(cycle)
+				for x in cycle: check[x] = True
+	for cycle in cycles:
+		if len(cycle) == 2: actual_count += 1
+		if len(cycle) > 2: actual_count += len(cycle) - 1
+
+	if actual_count % 2 == 0: return True
+	return False
 
 def get_next_states(state):
 	next_states = []
@@ -94,6 +131,9 @@ if __name__ == '__main__':
 	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
 # 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
+	if check_solvability(startnode, endnode) == False:
+		print 'The goal is not reachable'
+		sys.exit(1)
 	answer = ida_star(startnode, endnode)
 	if answer != None:
 		print 'Solution found at cost limit', answer[1]
