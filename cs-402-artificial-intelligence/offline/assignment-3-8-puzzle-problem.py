@@ -5,7 +5,7 @@ from time import sleep
 from pprint import pprint
 
 PUZZLE_SIZE = 3
-MAX_cost_cutoff = 31
+MAX_COST_CUTOFF = 31
 DEBUG_MODE = True
 SIMULATION_MODE = False
 
@@ -52,13 +52,16 @@ def pretty_print(solution):
 
 
 def ida_star(startnode, endnode):
-	initial_cost_cutoff = get_manhattan_distance(startnode, endnode)
+	cost_cuttoff = get_manhattan_distance(startnode, endnode)
 
-	while initial_cost_cutoff < MAX_cost_cutoff:
-		solution, cost_cutoff = dfs(startnode, 0, initial_cost_cutoff, [startnode])
-		if solution != None: return solution, cost_cutoff
-		if cost_cutoff == Infinity: return None
-		initial_cost_cutoff += 1
+	while cost_cuttoff < MAX_COST_CUTOFF:
+		solution, updated_cost_cutoff = dfs(startnode, 0, cost_cuttoff, [startnode])
+		if solution != None: return solution, updated_cost_cutoff
+		if updated_cost_cutoff == Infinity: return None
+		if DEBUG_MODE == True:
+			print 'DEBUG: No solution for f(n) =', cost_cutoff
+			print 'DEBUG: Trying for f(n) = ', updated_cost_cutoff
+		cost_cuttoff = updated_cost_cutoff
 
 def dfs(node, cost_from_root, cost_cutoff, path):
 	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
@@ -95,4 +98,4 @@ if __name__ == '__main__':
 	if answer != None:
 		print 'Solution found at cost limit', answer[1]
 		pretty_print(answer[0])
-	else: print 'No solution found within maximum cost limit', MAX_cost_cutoff
+	else: print 'No solution found within maximum cost limit', MAX_COST_CUTOFF
