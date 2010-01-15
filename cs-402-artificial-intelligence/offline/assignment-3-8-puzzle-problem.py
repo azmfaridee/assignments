@@ -6,10 +6,11 @@ from pprint import pprint
 import sys
 import math
 
-PUZZLE_SIZE = 4
+PUZZLE_SIZE = 3
 MAX_COST_CUTOFF = 31
 DEBUG_MODE = False
 SIMULATION_MODE = False
+total_nodes_generated = 0
 
 Infinity = float("inf")
 visited = []
@@ -102,6 +103,8 @@ def ida_star(startnode, endnode):
 		cost_cuttoff = updated_cost_cutoff
 
 def dfs(node, cost_from_root, cost_cutoff, path):
+	global total_nodes_generated
+	total_nodes_generated += 1
 	minimum_cost = cost_from_root + get_manhattan_distance(node, endnode)
 
 	if DEBUG_MODE == True:
@@ -129,12 +132,16 @@ if __name__ == '__main__':
 	# 8 puzzle
 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
 # 	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
-	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
+# 	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
 # 	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
 	# takes a lot of time
-# 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 	# this node is unsolvable
 # 	endnode = [1, 2, 4, 5, 0, 6, 8, 3, 7]
+
+	# worst case scenario
+# 	startnode = [8, 6, 7, 2, 5, 4, 3, 0, 1]
+# 	endnode = [6, 4, 7, 8, 5, 7, 3, 2, 1]
 
 	# 15 puzzle
 # 	startnode = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
@@ -149,3 +156,4 @@ if __name__ == '__main__':
 		print 'Solution found at cost limit', answer[1]
 		pretty_print(answer[0])
 	else: print 'No solution found within maximum cost limit', MAX_COST_CUTOFF
+	print 'Total nodes generated:', total_nodes_generated
