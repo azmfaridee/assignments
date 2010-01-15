@@ -46,6 +46,8 @@ def check_solvability(startnode, endnode):
 			if cycle != []:
 				cycles.append(cycle)
 				for x in cycle: check[x] = True
+	if DEBUG_MODE == True:
+		print 'DEBUG: Permutation cycles: ', filter(lambda x: len(x) != 1, cycles)
 	for cycle in cycles:
 		if len(cycle) == 2: actual_count += 1
 		if len(cycle) > 2: actual_count += len(cycle) - 1
@@ -91,16 +93,16 @@ def pretty_print(solution):
 
 
 def ida_star(startnode, endnode):
-	cost_cuttoff = get_manhattan_distance(startnode, endnode)
+	cost_cutoff = get_manhattan_distance(startnode, endnode)
 
-	while cost_cuttoff < MAX_COST_CUTOFF:
-		solution, updated_cost_cutoff = dfs(startnode, 0, cost_cuttoff, [startnode])
+	while cost_cutoff < MAX_COST_CUTOFF:
+		solution, updated_cost_cutoff = dfs(startnode, 0, cost_cutoff, [startnode])
 		if solution != None: return solution, updated_cost_cutoff
 		if updated_cost_cutoff == Infinity: return None
 		if DEBUG_MODE == True:
 			print 'DEBUG: No solution for f(n) =', cost_cutoff
 			print 'DEBUG: Trying for f(n) = ', updated_cost_cutoff
-		cost_cuttoff = updated_cost_cutoff
+		cost_cutoff = updated_cost_cutoff
 
 def dfs(node, cost_from_root, cost_cutoff, path):
 	global total_nodes_generated
@@ -130,18 +132,18 @@ def dfs(node, cost_from_root, cost_cutoff, path):
 
 if __name__ == '__main__':
 	# 8 puzzle
-	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
+# 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
 # 	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
 # 	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
 # 	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
 	# takes a lot of time
-	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+# 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 	# this node is unsolvable
 # 	endnode = [1, 2, 4, 5, 0, 6, 8, 3, 7]
 
 	# worst case scenario
-# 	startnode = [8, 6, 7, 2, 5, 4, 3, 0, 1]
-# 	endnode = [6, 4, 7, 8, 5, 7, 3, 2, 1]
+	startnode = [8, 6, 7, 2, 5, 4, 3, 0, 1]
+	endnode = [6, 4, 7, 8, 5, 0, 3, 2, 1]
 
 	# 15 puzzle
 # 	startnode = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
