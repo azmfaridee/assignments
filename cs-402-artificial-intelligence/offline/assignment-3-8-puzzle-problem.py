@@ -82,7 +82,7 @@ def pretty_print(solution):
 	for nodeindex, node in enumerate(solution):
 		print 'Position:', nodeindex,
 		for index, item in enumerate(node):
-			if index % 3 == 0: print
+			if index % PUZZLE_SIZE == 0: print
 			if item == 0: print ' ',
 			else: print item,
 		print
@@ -130,6 +130,7 @@ if __name__ == '__main__':
 # 	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
 	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
 # 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+	endnode = [1, 2, 4, 5, 0, 6, 8, 3, 7]
 
 	if check_solvability(startnode, endnode) == False:
 		print 'The goal is not reachable'
