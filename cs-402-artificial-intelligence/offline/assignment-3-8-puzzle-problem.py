@@ -132,18 +132,18 @@ def dfs(node, cost_from_root, cost_cutoff, path):
 
 if __name__ == '__main__':
 	# 8 puzzle
-# 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
+ 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
 # 	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
 # 	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
-# 	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
+ 	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
 	# takes a lot of time
 # 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 	# this node is unsolvable
 # 	endnode = [1, 2, 4, 5, 0, 6, 8, 3, 7]
 
-	# worst case scenario
-	startnode = [8, 6, 7, 2, 5, 4, 3, 0, 1]
-	endnode = [6, 4, 7, 8, 5, 0, 3, 2, 1]
+	# the supposed worst (!) case scenario, but actually its not :P
+#	startnode = [8, 6, 7, 2, 5, 4, 3, 0, 1]
+#	endnode = [6, 4, 7, 8, 5, 0, 3, 2, 1]
 
 	# 15 puzzle
 # 	startnode = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
