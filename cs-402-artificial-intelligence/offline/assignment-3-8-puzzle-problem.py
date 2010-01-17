@@ -10,10 +10,9 @@ PUZZLE_SIZE = 3
 MAX_COST_CUTOFF = 31
 DEBUG_MODE = False
 SIMULATION_MODE = False
-total_nodes_generated = 0
-
 Infinity = float("inf")
-visited = []
+
+total_nodes_generated = 0
 
 get_2dindex = lambda state, n: (state.index(n) / PUZZLE_SIZE, state.index(n) % PUZZLE_SIZE)
 
@@ -132,10 +131,10 @@ def dfs(node, cost_from_root, cost_cutoff, path):
 
 if __name__ == '__main__':
 	# 8 puzzle
- 	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
+#  	startnode = [7, 2, 4, 5, 0, 6, 8, 3, 1]
 # 	endnode = [7, 4, 6, 5, 2, 0, 8, 3, 1]
 # 	endnode = [7, 4, 6, 8, 5, 3, 0, 1, 2]
- 	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
+#  	endnode = [7, 4, 6, 5, 2, 1, 0, 8, 3]
 	# takes a lot of time
 # 	endnode = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 	# this node is unsolvable
@@ -145,11 +144,14 @@ if __name__ == '__main__':
 #	startnode = [8, 6, 7, 2, 5, 4, 3, 0, 1]
 #	endnode = [6, 4, 7, 8, 5, 0, 3, 2, 1]
 
+	startnode = [4, 0, 6, 2, 5, 1, 7, 8 3]
+	endnode = [1, 2, 3, 4, 5, 6, 7, 8, 0]
+
 	# 15 puzzle
 # 	startnode = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
 # 	endnode = [1, 2, 3, 4, 5, 6, 7, 8, 0, 15, 12, 14, 13, 9, 11, 10]
 
-	PUZZLE_SIZE = int(math.sqrt(len(startnode)))
+#	PUZZLE_SIZE = int(math.sqrt(len(startnode)))
 	if check_solvability(startnode, endnode) == False:
 		print 'The goal is not reachable'
 		sys.exit(1)
