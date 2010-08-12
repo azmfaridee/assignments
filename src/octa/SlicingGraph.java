@@ -54,7 +54,7 @@ public class SlicingGraph {
         }
         System.out.println("Number of faces in the graph: " + this.numFaces);
         i = 1;
-        for (GraphFace graphFace: faces){
+        for (GraphFace graphFace : faces) {
             System.out.println("List of nodes in face: " + (i++) + ": " + graphFace.clockwiseMemberVertices);
         }
 
@@ -107,11 +107,11 @@ public class SlicingGraph {
 
         }
 
-        this.printInfo();
+//        this.printInfo();
 
 
 
-        
+
         // input processing for the slicing tree
         // create a slicing tree
         SlicingTree slicingTree = new SlicingTree();
@@ -122,7 +122,7 @@ public class SlicingGraph {
 //        System.out.println("Number of internal nodes (cuts): " + numInternalNodes);
 
         for (int j = 0; j < numInternalNodes; j++) {
-            SlicingTreeInternalNode internalNode = new SlicingTreeInternalNode(j+1);
+            SlicingTreeInternalNode internalNode = new SlicingTreeInternalNode(j + 1);
 
             String elems[] = inputStings.get(i++).split(" ");
 
@@ -164,7 +164,7 @@ public class SlicingGraph {
 //        System.out.println("Number of leaf nodes (faces): " + numLeafNodes);
 
         for (int j = 0; j < numLeafNodes; j++) {
-            SlicingTreeExternalNode externalNode = new SlicingTreeExternalNode(j+1);
+            SlicingTreeExternalNode externalNode = new SlicingTreeExternalNode(j + 1);
 
             String elems[] = inputStings.get(i++).split(" ");
 
@@ -181,6 +181,13 @@ public class SlicingGraph {
 
         }
 
-        slicingTree.printInfo();
+//         calling the printinfo before and after updating should result in different outcome
+//        slicingTree.printInfo();
+        slicingTree.updateTree();
+//        slicingTree.printInfo();
+
+        // tesing preorder traversal
+        ArrayList<SlicingTreeNode> traverserdList = slicingTree.reversePreorderTraverse(0);
+        slicingTree.printInfo(traverserdList);
     }
 }

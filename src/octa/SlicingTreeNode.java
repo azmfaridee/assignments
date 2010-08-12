@@ -12,4 +12,5 @@ package octa;
 public interface SlicingTreeNode {
     public void setParentId(int parentId);
     public int getParentId();
+    public int getId();
 }

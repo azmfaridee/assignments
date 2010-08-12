@@ -15,21 +15,20 @@ public class SlicingTreeInternalNode implements SlicingTreeNode{
     private CutType cutType;
     private int id;
     private int parentId;
-    private SlicingTreeNode parent;
+    private SlicingTreeNode rightChild;
+    private SlicingTreeNode leftChild;
     private ArrayList<Integer> slicingPath;
     
     public SlicingTreeInternalNode(int id) {
         this.id = id;
+        this.rightChild = null;
+        this.leftChild = null;
     }
 
     public void setCutType(CutType cutType) {
         this.cutType = cutType;
     }
-
-    public void setParent(SlicingTreeNode parent) {
-        this.parent = parent;
-    }
-
+    
     public void setSlicingPath(ArrayList<Integer> slicingPath) {
         this.slicingPath = slicingPath;
     }
@@ -37,6 +36,16 @@ public class SlicingTreeInternalNode implements SlicingTreeNode{
     public void setParentId(int parentId) {
         this.parentId = parentId;
     }
+
+    public void setRightChild(SlicingTreeNode rightChild) {
+        this.rightChild = rightChild;
+    }
+
+    public void setLeftChild(SlicingTreeNode leftChild) {
+        this.leftChild = leftChild;
+    }
+
+    
 
     public CutType getCutType() {
         return cutType;
@@ -54,5 +63,14 @@ public class SlicingTreeInternalNode implements SlicingTreeNode{
         return id;
     }
 
+    public SlicingTreeNode getLeftChild() {
+        return leftChild;
+    }
+
+    public SlicingTreeNode getRightChild() {
+        return rightChild;
+    }
+
+    
     
 }
