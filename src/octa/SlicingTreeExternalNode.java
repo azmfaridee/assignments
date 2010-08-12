@@ -12,9 +12,10 @@ package octa;
 public class SlicingTreeExternalNode implements SlicingTreeNode{
     private int faceArea;
     private int parentId;
+    private int id;
 
-    public SlicingTreeExternalNode() {
-        super();
+    public SlicingTreeExternalNode(int id) {
+        this.id = id;
     }
 
     public void setFaceArea(int faceArea) {
@@ -25,6 +26,16 @@ public class SlicingTreeExternalNode implements SlicingTreeNode{
         this.parentId = parentId;
     }
 
-    
+    public int getParentId() {
+        return this.parentId;
+    }
+
+    public int getFaceArea() {
+        return faceArea;
+    }
+
+    public int getId() {
+        return id;
+    }
 
 }

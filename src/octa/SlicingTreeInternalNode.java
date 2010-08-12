@@ -13,12 +13,13 @@ import java.util.ArrayList;
  */
 public class SlicingTreeInternalNode implements SlicingTreeNode{
     private CutType cutType;
+    private int id;
     private int parentId;
     private SlicingTreeNode parent;
     private ArrayList<Integer> slicingPath;
     
-    public SlicingTreeInternalNode() {
-        super();
+    public SlicingTreeInternalNode(int id) {
+        this.id = id;
     }
 
     public void setCutType(CutType cutType) {
@@ -37,6 +38,21 @@ public class SlicingTreeInternalNode implements SlicingTreeNode{
         this.parentId = parentId;
     }
 
-    
+    public CutType getCutType() {
+        return cutType;
+    }
 
+    public ArrayList<Integer> getSlicingPath() {
+        return slicingPath;
+    }
+
+    public int getParentId() {
+        return this.parentId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    
 }

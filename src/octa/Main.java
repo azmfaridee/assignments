@@ -4,8 +4,6 @@
  */
 package octa;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author abuzaher
