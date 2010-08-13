@@ -13,14 +13,21 @@ import java.util.Iterator;
  */
 public class SlicingTree {
 
-    ArrayList<SlicingTreeNode> nodeList;
-    int numInternalNodes;
-    int numExternalNodes;
-    boolean updated;
+    private  ArrayList<SlicingTreeNode> nodeList;
+    private  int numInternalNodes;
+    private  int numExternalNodes;
+    private boolean updated;
+    private int minFaceArea;
+
+    public int getExternalNodeStartIdx(){
+        return this.numInternalNodes;
+    }
 
     public SlicingTree() {
         this.nodeList = new ArrayList<SlicingTreeNode>();
         this.updated = false;
+        // intialize minFaceArea to a big value
+        this.minFaceArea = Integer.MAX_VALUE;
     }
 
     public void setNumInternalNodes(int numInternalNodes) {
@@ -115,24 +122,34 @@ public class SlicingTree {
 
                 }
             }
+            System.out.println("Min Face Area: " + this.minFaceArea);
         }
 
     }
 
     /*
      * updates the child parent references in the the tree
+     * updates the minFaceArea
      */
     public void updateTree() {
         for (Iterator<SlicingTreeNode> it = nodeList.iterator(); it.hasNext();) {
             SlicingTreeNode treeNode = it.next();
             int parentId = treeNode.getParentId();
             int parentIndex = parentId - 1;
+            // update child parent relationship
             if (parentIndex > -1) {
                 SlicingTreeInternalNode parent = (SlicingTreeInternalNode) this.nodeList.get(parentIndex);
                 if (parent.getRightChild() == null) {
                     parent.setRightChild(treeNode);
                 } else {
                     parent.setLeftChild(treeNode);
+                }
+            }
+            // update minFaceArea
+            if (treeNode instanceof SlicingTreeExternalNode){
+                int currentNodeFaceArea = ((SlicingTreeExternalNode)treeNode).getFaceArea();
+                if( this.minFaceArea  > currentNodeFaceArea){
+                    this.minFaceArea = currentNodeFaceArea;
                 }
             }
         }
