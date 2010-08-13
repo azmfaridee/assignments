@@ -101,6 +101,7 @@ public class SlicingTree {
                 if (node instanceof SlicingTreeInternalNode) {
 
                     System.out.println("Node " + node.getId() + " is an internal node with area: " + node.getFaceArea());
+                    System.out.println("Node " + node.getId() + " is cut by path: " + ((SlicingTreeInternalNode) node).getSlicingPath());
 
                     SlicingTreeNode leftChild = ((SlicingTreeInternalNode) node).getLeftChild();
 

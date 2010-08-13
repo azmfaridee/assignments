@@ -16,4 +16,5 @@ public interface SlicingTreeNode {
 
     public void setParentId(int parentId);
     public void setFaceArea(int faceArea);
+
 }

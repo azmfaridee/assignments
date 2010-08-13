@@ -26,7 +26,7 @@ public class Main {
         graph.printInfo();
         System.out.println("PRINTING TREE INFO");
         tree.printInfo();
-        System.out.println("REVERSE PREORDER TRAVERSAL OF TREE");
-        tree.printInfo(tree.reversePreorderTraverse(0));
+//        System.out.println("REVERSE PREORDER TRAVERSAL OF TREE");
+//        tree.printInfo(tree.reversePreorderTraverse(0));
     }
 }
