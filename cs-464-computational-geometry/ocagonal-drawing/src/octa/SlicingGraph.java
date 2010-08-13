@@ -27,7 +27,7 @@ public class SlicingGraph {
     }
 
     public void addFace(GraphFace gf) {
-        this.faces.add(gf);
+        this.getFaces().add(gf);
     }
 
     public int getNumVertex() {
@@ -35,7 +35,7 @@ public class SlicingGraph {
     }
 
     public int getNumFaces() {
-        return this.faces.size();
+        return this.getFaces().size();
     }
 
     public void setNumVertices(int numVertices) {
@@ -54,9 +54,23 @@ public class SlicingGraph {
         }
         System.out.println("Number of faces in the graph: " + this.numFaces);
         i = 1;
-        for (GraphFace graphFace : faces) {
+        for (GraphFace graphFace : getFaces()) {
             System.out.println("List of nodes in face: " + (i++) + ": " + graphFace.getClockwiseMemberVertices());
         }
 
+    }
+
+    /**
+     * @return the faces
+     */
+    public ArrayList<GraphFace> getFaces() {
+        return faces;
+    }
+
+    /**
+     * @param faces the faces to set
+     */
+    public void setFaces(ArrayList<GraphFace> faces) {
+        this.faces = faces;
     }
 }

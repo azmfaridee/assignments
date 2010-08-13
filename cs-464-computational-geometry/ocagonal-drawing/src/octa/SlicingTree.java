@@ -18,16 +18,20 @@ public class SlicingTree {
     private int numExternalNodes;
     private boolean updated;
     private int minFaceArea;
+    SlicingGraph graph;
 
     public int getExternalNodeStartIdx() {
         return this.numInternalNodes;
     }
 
-    public SlicingTree() {
+    public SlicingTree(SlicingGraph graph) {
         this.nodeList = new ArrayList<SlicingTreeNode>();
         this.updated = false;
         // intialize minFaceArea to a big value
         this.minFaceArea = Integer.MAX_VALUE;
+        // the reference for the slicing graph, it will be used later for updating each faces
+        // vertex list
+        this.graph = graph;
     }
 
     public void setNumInternalNodes(int numInternalNodes) {
@@ -121,6 +125,7 @@ public class SlicingTree {
                 } else {
                     System.out.println("Node " + node.getId() + " is an external node with face area of: " + node.getFaceArea());
                 }
+                System.out.println("Node " + node.getId() + " has member vertices: " + node.getClockwiseMemberVertices());
             }
             System.out.println("Min Face Area: " + this.minFaceArea);
         }
@@ -128,9 +133,10 @@ public class SlicingTree {
     }
 
     /*
-     * updates the child parent references in the the tree
-     * updates the minFaceArea
-     * update collective area of each internal node
+     * 1. updates the child parent references in the the tree
+     * 2. updates the minFaceArea
+     * 3. update collective area of each internal node
+     * 4. update the list of member vertices in each node in clockwise order
      */
     public void updateTree() {
         for (Iterator<SlicingTreeNode> it = nodeList.iterator(); it.hasNext();) {
@@ -155,10 +161,20 @@ public class SlicingTree {
             }
         }
         // update the collective area of each internal node
+        // NOTE: the iteration must start form extenal nodes
         for (int i = nodeList.size() - 1; i > 0; i--) {
             SlicingTreeNode node = nodeList.get(i);
             SlicingTreeNode parent = nodeList.get(node.getParentId() - 1);
             parent.setFaceArea(parent.getFaceArea() + node.getFaceArea());
+
+            // code to update the list of vertex in each node
+            if (node instanceof SlicingTreeExternalNode){
+                // if external node then just copy from the SlicingGraph
+                SlicingTreeExternalNode leaf = (SlicingTreeExternalNode)node;
+                int graphEquivFaceIdx = i - this.numInternalNodes;
+                ArrayList<Integer> vertices = this.graph.getFaces().get(graphEquivFaceIdx).getClockwiseMemberVertices();
+                leaf.setClockwiseMemberVertices(vertices);
+            }
         }
         this.updated = true;
     }

@@ -17,7 +17,7 @@ public class Main {
         String fileName = "src/octa/input.txt";
         
         SlicingGraph graph = new SlicingGraph();
-        SlicingTree tree = new SlicingTree();
+        SlicingTree tree = new SlicingTree(graph);
         InputParser parser = new InputParser(fileName, graph, tree);
         
         parser.parseInput();

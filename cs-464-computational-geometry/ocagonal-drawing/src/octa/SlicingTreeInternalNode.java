@@ -19,6 +19,7 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
     private SlicingTreeNode leftChild;
     private ArrayList<Integer> slicingPath;
     private int faceArea;
+    private ArrayList<Integer> clockwiseMemberVertices;
 
     public SlicingTreeInternalNode(int id) {
         this.id = id;
@@ -82,5 +83,19 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
 
     public void setFaceArea(int faceArea) {
         this.faceArea = faceArea;
+    }
+
+    /**
+     * @return the clockwiseMemberVertices
+     */
+    public ArrayList<Integer> getClockwiseMemberVertices() {
+        return clockwiseMemberVertices;
+    }
+
+    /**
+     * @param clockwiseMemberVertices the clockwiseMemberVertices to set
+     */
+    public void setClockwiseMemberVertices(ArrayList<Integer> clockwiseMemberVertices) {
+        this.clockwiseMemberVertices = clockwiseMemberVertices;
     }
 }

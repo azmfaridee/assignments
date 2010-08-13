@@ -5,6 +5,8 @@
 
 package octa;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author abuzaher
@@ -13,6 +15,7 @@ public class SlicingTreeExternalNode implements SlicingTreeNode{
     private int faceArea;
     private int parentId;
     private int id;
+    private ArrayList<Integer> clockwiseMemberVertices;
 
     public SlicingTreeExternalNode(int id) {
         this.id = id;
@@ -36,6 +39,14 @@ public class SlicingTreeExternalNode implements SlicingTreeNode{
 
     public int getId() {
         return id;
+    }
+
+    public ArrayList<Integer> getClockwiseMemberVertices() {
+        return clockwiseMemberVertices;
+    }
+
+    public void setClockwiseMemberVertices(ArrayList<Integer> clockwiseMemberVertices) {
+        this.clockwiseMemberVertices = clockwiseMemberVertices;
     }
 
 }
