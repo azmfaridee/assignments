@@ -1,0 +1,11 @@
+# no of actual points in faces (including bends)
+# list of (x, y) co-ordinate for the face
+# example below (sample data is random, do not take it literally)
+# each face is actually made of 4 vertices, but because of the bends
+# there can be more actual vertices
+4
+(1, 2) (3, 7) (4, 5) (6, 7)
+6
+(2, 3) (6, 7) (9, 1) (7, 9) (12, 3) (9, 4)
+... ...
+... ...
