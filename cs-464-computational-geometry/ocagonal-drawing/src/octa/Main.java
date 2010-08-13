@@ -14,7 +14,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String argv[]) {
-        String fileName = "/Users/abuzaher/Documents/Departmental/assignments/cs-464-computational-geometry/ocagonal-drawing/src/octa/input.txt";
+        String fileName = "src/octa/input.txt";
         
         SlicingGraph graph = new SlicingGraph();
         SlicingTree tree = new SlicingTree();
