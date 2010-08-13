@@ -31,7 +31,7 @@ public class SlicingTreeExternalNode implements SlicingTreeNode{
     }
 
     public int getFaceArea() {
-        return faceArea;
+        return this.faceArea;
     }
 
     public int getId() {

@@ -10,7 +10,10 @@ package octa;
  * @author abuzaher
  */
 public interface SlicingTreeNode {
-    public void setParentId(int parentId);
     public int getParentId();
     public int getId();
+    public int getFaceArea();
+
+    public void setParentId(int parentId);
+    public void setFaceArea(int faceArea);
 }

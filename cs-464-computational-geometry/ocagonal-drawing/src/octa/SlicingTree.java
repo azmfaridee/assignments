@@ -13,13 +13,13 @@ import java.util.Iterator;
  */
 public class SlicingTree {
 
-    private  ArrayList<SlicingTreeNode> nodeList;
-    private  int numInternalNodes;
-    private  int numExternalNodes;
+    private ArrayList<SlicingTreeNode> nodeList;
+    private int numInternalNodes;
+    private int numExternalNodes;
     private boolean updated;
     private int minFaceArea;
 
-    public int getExternalNodeStartIdx(){
+    public int getExternalNodeStartIdx() {
         return this.numInternalNodes;
     }
 
@@ -100,7 +100,7 @@ public class SlicingTree {
                 SlicingTreeNode node = it.next();
                 if (node instanceof SlicingTreeInternalNode) {
 
-                    System.out.println("Node " + node.getId() + " is an internal node.");
+                    System.out.println("Node " + node.getId() + " is an internal node with area: " + node.getFaceArea());
 
                     SlicingTreeNode leftChild = ((SlicingTreeInternalNode) node).getLeftChild();
 
@@ -118,8 +118,7 @@ public class SlicingTree {
                     }
 
                 } else {
-                    System.out.println("Node " + node.getId() + " is an external node.");
-
+                    System.out.println("Node " + node.getId() + " is an external node with face area of: " + node.getFaceArea());
                 }
             }
             System.out.println("Min Face Area: " + this.minFaceArea);
@@ -130,6 +129,7 @@ public class SlicingTree {
     /*
      * updates the child parent references in the the tree
      * updates the minFaceArea
+     * update collective area of each internal node
      */
     public void updateTree() {
         for (Iterator<SlicingTreeNode> it = nodeList.iterator(); it.hasNext();) {
@@ -146,12 +146,18 @@ public class SlicingTree {
                 }
             }
             // update minFaceArea
-            if (treeNode instanceof SlicingTreeExternalNode){
-                int currentNodeFaceArea = ((SlicingTreeExternalNode)treeNode).getFaceArea();
-                if( this.minFaceArea  > currentNodeFaceArea){
+            if (treeNode instanceof SlicingTreeExternalNode) {
+                int currentNodeFaceArea = ((SlicingTreeExternalNode) treeNode).getFaceArea();
+                if (this.minFaceArea > currentNodeFaceArea) {
                     this.minFaceArea = currentNodeFaceArea;
                 }
             }
+        }
+        // update the collective area of each internal node
+        for (int i = nodeList.size() - 1; i > 0; i--) {
+            SlicingTreeNode node = nodeList.get(i);
+            SlicingTreeNode parent = nodeList.get(node.getParentId() - 1);
+            parent.setFaceArea(parent.getFaceArea() + node.getFaceArea());
         }
         this.updated = true;
     }
