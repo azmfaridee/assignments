@@ -98,4 +98,15 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
     public void setClockwiseMemberVertices(ArrayList<Integer> clockwiseMemberVertices) {
         this.clockwiseMemberVertices = clockwiseMemberVertices;
     }
+
+    public void pruneInteriorVertices() {
+        for (int i = 1; i < this.slicingPath.size() - 1; i++) {
+            Integer innerVertex = this.slicingPath.get(i);
+            int index = this.getClockwiseMemberVertices().indexOf(innerVertex);
+            if (index != -1) {
+                // we have found an innter vertex which is invalid
+                this.getClockwiseMemberVertices().remove(innerVertex);
+            }
+        }
+    }
 }

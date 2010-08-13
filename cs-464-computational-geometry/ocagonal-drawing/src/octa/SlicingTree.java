@@ -168,12 +168,23 @@ public class SlicingTree {
             parent.setFaceArea(parent.getFaceArea() + node.getFaceArea());
 
             // code to update the list of vertex in each node
-            if (node instanceof SlicingTreeExternalNode){
+            if (node instanceof SlicingTreeExternalNode) {
                 // if external node then just copy from the SlicingGraph
-                SlicingTreeExternalNode leaf = (SlicingTreeExternalNode)node;
+                SlicingTreeExternalNode leaf = (SlicingTreeExternalNode) node;
                 int graphEquivFaceIdx = i - this.numInternalNodes;
                 ArrayList<Integer> vertices = this.graph.getFaces().get(graphEquivFaceIdx).getClockwiseMemberVertices();
                 leaf.setClockwiseMemberVertices(vertices);
+            } else {
+                // internal nodes need to merge the two child nodes list and it MUST
+                // preserve the clockwise node order
+                SlicingTreeInternalNode inode = (SlicingTreeInternalNode) node;
+
+                ArrayList<Integer> rightList = inode.getRightChild().getClockwiseMemberVertices();
+                ArrayList<Integer> leftList = inode.getLeftChild().getClockwiseMemberVertices();
+                ArrayList<Integer> mergedList = clockWiseMerge(rightList, leftList);
+                inode.setClockwiseMemberVertices(mergedList);
+                // need to prune inner vertices too
+                inode.pruneInteriorVertices();
             }
         }
         this.updated = true;
@@ -200,5 +211,29 @@ public class SlicingTree {
             traveresedList.addAll(leftTraversedList);
         }
         return traveresedList;
+    }
+
+    private ArrayList<Integer> clockWiseMerge(ArrayList<Integer> rightList, ArrayList<Integer> leftList) {
+        // FIXME: wee need deepcopy, cloning does a shallow copy
+        ArrayList<Integer> mergedList = (ArrayList<Integer>) rightList.clone();
+
+        int idx = 0;
+        int insertIdx = 1;
+        System.out.println("Iternation");
+        for (int i = 0; i < leftList.size(); i++) {
+            System.out.println(mergedList);
+            Integer searchVertex = leftList.get(i);
+            idx = mergedList.indexOf(searchVertex);
+            if (idx != -1) {
+                insertIdx = idx + 1;
+            } else {
+                mergedList.add(insertIdx, searchVertex);
+
+                insertIdx += 1;
+            }
+            System.out.println(mergedList);
+            System.out.println("");
+        }        
+        return mergedList;
     }
 }
