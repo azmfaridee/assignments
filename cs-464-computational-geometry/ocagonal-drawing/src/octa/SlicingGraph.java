@@ -50,12 +50,12 @@ public class SlicingGraph {
         System.out.println("Number of vertices in the graph: " + this.numVertices);
         int i = 0;
         for (GraphVertex graphVertex : vertices) {
-            System.out.println("Adjacency List for vertex " + (i++) + ": " + graphVertex.clockwiseAdjList);
+            System.out.println("Adjacency List for vertex " + (i++) + ": " + graphVertex.getClockwiseAdjList());
         }
         System.out.println("Number of faces in the graph: " + this.numFaces);
         i = 1;
         for (GraphFace graphFace : faces) {
-            System.out.println("List of nodes in face: " + (i++) + ": " + graphFace.clockwiseMemberVertices);
+            System.out.println("List of nodes in face: " + (i++) + ": " + graphFace.getClockwiseMemberVertices());
         }
 
     }
