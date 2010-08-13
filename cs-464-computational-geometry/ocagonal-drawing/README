@@ -1,0 +1,3 @@
+Major Issue:
+
+1. Current Input taking system provides just numbers for faces and edges, but I don't think this will suffice for large graphs, we will need the input in 2D plane.
