@@ -14,9 +14,19 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String argv[]) {
-        String fileName = "/Users/abuzaher/NetBeansProjects/OctagonalDraw/src/octa/input.txt";
-
+        String fileName = "/Users/abuzaher/Documents/Departmental/assignments/cs-464-computational-geometry/ocagonal-drawing/src/octa/input.txt";
+        
         SlicingGraph graph = new SlicingGraph();
-        graph.parseInput(fileName);
+        SlicingTree tree = new SlicingTree();
+        InputParser parser = new InputParser(fileName, graph, tree);
+        
+        parser.parseInput();
+
+        System.out.println("PRINTING GRAPH INFO");
+        graph.printInfo();
+        System.out.println("PRINTING TREE INFO");
+        tree.printInfo();
+        System.out.println("REVERSE PREORDER TRAVERSAL OF TREE");
+        tree.printInfo(tree.reversePreorderTraverse(0));
     }
 }
