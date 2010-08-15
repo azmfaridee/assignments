@@ -215,7 +215,9 @@ public class SlicingTree {
 
     private ArrayList<Integer> clockWiseMerge(ArrayList<Integer> rightList, ArrayList<Integer> leftList) {
         // FIXME: wee need deepcopy, cloning does a shallow copy
-        ArrayList<Integer> mergedList = (ArrayList<Integer>) rightList.clone();
+//        ArrayList<Integer> mergedList = (ArrayList<Integer>) rightList.clone();
+        // this is the deep copy function being used
+        ArrayList<Integer> mergedList = (ArrayList<Integer>) DeepCopier.deepCopy(rightList);
 
         int idx = 0;
         int insertIdx = 1;
