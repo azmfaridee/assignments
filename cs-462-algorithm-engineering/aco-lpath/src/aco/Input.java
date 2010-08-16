@@ -20,6 +20,11 @@ public class Input {
         }
     }
 
+    /*
+     * Reads all the data in the file in linear fashion
+     * the 1D Vector vc will have the 2D data as well as alpha and beta
+     * parametes
+     */
     public static Vector readFile() {
         Vector<Double> vc = new Vector<Double>();
         while (input.hasNext()) {
