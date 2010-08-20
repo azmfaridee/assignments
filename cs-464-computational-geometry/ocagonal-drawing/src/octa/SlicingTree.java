@@ -152,12 +152,12 @@ public class SlicingTree {
                     parent.setLeftChild(treeNode);
                 }
                 // if you see that both the childs ref has been updated
-                if (parent.getLeftChild() != null && parent.getRightChild() != null){
+                if (parent.getLeftChild() != null && parent.getRightChild() != null) {
                     // right child is internal node and left child is external node
                     // this is invalid, swap thow two
                     // the invalididy is due to the way we take the input from the user, we take internal nodes first, and external nodes later
                     // but if a node has both type of child, the external node must alwasys the right child in this case
-                    if (parent.getRightChild() instanceof SlicingTreeInternalNode && parent.getLeftChild() instanceof SlicingTreeExternalNode){
+                    if (parent.getRightChild() instanceof SlicingTreeInternalNode && parent.getLeftChild() instanceof SlicingTreeExternalNode) {
                         SlicingTreeNode temp = parent.getLeftChild();
                         parent.setLeftChild(parent.getRightChild());
                         parent.setRightChild(temp);
@@ -174,10 +174,16 @@ public class SlicingTree {
         }
         // update the collective area of each internal node
         // NOTE: the iteration must start form extenal nodes
-        for (int i = nodeList.size() - 1; i > 0; i--) {
+        for (int i = nodeList.size() - 1; i >= 0; i--) {
             SlicingTreeNode node = nodeList.get(i);
-            SlicingTreeNode parent = nodeList.get(node.getParentId() - 1);
-            parent.setFaceArea(parent.getFaceArea() + node.getFaceArea());
+
+            // root node does not have any parent, so it's parent does not need any updating
+            if (i > 0){
+                SlicingTreeNode parent = nodeList.get(node.getParentId() - 1);
+                parent.setFaceArea(parent.getFaceArea() + node.getFaceArea());
+            }
+
+//            System.out.println("Calling for: " + node.getId());
 
             // code to update the list of vertex in each node
             if (node instanceof SlicingTreeExternalNode) {
@@ -190,6 +196,7 @@ public class SlicingTree {
                 // internal nodes need to merge the two child nodes list and it MUST
                 // preserve the clockwise node order
                 SlicingTreeInternalNode inode = (SlicingTreeInternalNode) node;
+
 
                 ArrayList<Integer> rightList = inode.getRightChild().getClockwiseMemberVertices();
                 ArrayList<Integer> leftList = inode.getLeftChild().getClockwiseMemberVertices();
@@ -261,7 +268,7 @@ public class SlicingTree {
             CircularList<Integer> rightCircularList = new CircularList<Integer>(rightList, topElement);
             CircularList<Integer> leftCircularList = new CircularList<Integer>(leftList, bottomElement);
 
-            System.out.println("Trying to merge: " + rightList + " and " + leftList + " with slicing path " + slicingPath);
+//            System.out.println("Trying to merge: " + rightList + " and " + leftList + " with slicing path " + slicingPath);
 
             Integer element;
 
@@ -273,7 +280,7 @@ public class SlicingTree {
                 element = rightCircularList.getNext();
             }
 
-            System.out.println("After right merging: " + mergedList);
+//            System.out.println("After right merging: " + mergedList);
 
             mergedList.add(bottomElement);
             element = leftCircularList.getNext();
@@ -281,7 +288,8 @@ public class SlicingTree {
                 mergedList.add(element);
                 element = leftCircularList.getNext();
             }
-            System.out.println("Merger List: " + mergedList);
+//            System.out.println("Merger List: " + mergedList);
+//            System.out.println("");
             return mergedList;
         } catch (Exception ex) {
 //            Logger.getLogger(SlicingTree.class.getName()).log(Level.SEVERE, null, ex);
