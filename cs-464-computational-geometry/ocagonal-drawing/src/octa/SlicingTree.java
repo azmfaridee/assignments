@@ -110,16 +110,16 @@ public class SlicingTree {
                     SlicingTreeNode leftChild = ((SlicingTreeInternalNode) node).getLeftChild();
 
                     if (leftChild instanceof SlicingTreeInternalNode) {
-                        System.out.println("Left child of node " + node.getId() + ": internal node: " + leftChild.getId());
+                        System.out.println("Left child of node " + node.getId() + ": internal node: " + leftChild.getId() + " with values " + leftChild.getClockwiseMemberVertices());
                     } else {
-                        System.out.println("Left child of node " + node.getId() + ": external node: " + leftChild.getId());
+                        System.out.println("Left child of node " + node.getId() + ": external node: " + leftChild.getId() + " with values " + leftChild.getClockwiseMemberVertices());
                     }
 
                     SlicingTreeNode rightChild = ((SlicingTreeInternalNode) node).getRightChild();
                     if (rightChild instanceof SlicingTreeInternalNode) {
-                        System.out.println("Right child of node " + node.getId() + ": internal node: " + rightChild.getId());
+                        System.out.println("Right child of node " + node.getId() + ": internal node: " + rightChild.getId() + " with values " + rightChild.getClockwiseMemberVertices());
                     } else {
-                        System.out.println("Left child of node " + node.getId() + ": external node: " + rightChild.getId());
+                        System.out.println("Right child of node " + node.getId() + ": external node: " + rightChild.getId() + " with values " + rightChild.getClockwiseMemberVertices());
                     }
 
                 } else {
@@ -151,6 +151,18 @@ public class SlicingTree {
                 } else {
                     parent.setLeftChild(treeNode);
                 }
+                // if you see that both the childs ref has been updated
+                if (parent.getLeftChild() != null && parent.getRightChild() != null){
+                    // right child is internal node and left child is external node
+                    // this is invalid, swap thow two
+                    // the invalididy is due to the way we take the input from the user, we take internal nodes first, and external nodes later
+                    // but if a node has both type of child, the external node must alwasys the right child in this case
+                    if (parent.getRightChild() instanceof SlicingTreeInternalNode && parent.getLeftChild() instanceof SlicingTreeExternalNode){
+                        SlicingTreeNode temp = parent.getLeftChild();
+                        parent.setLeftChild(parent.getRightChild());
+                        parent.setRightChild(temp);
+                    }
+                }
             }
             // update minFaceArea
             if (treeNode instanceof SlicingTreeExternalNode) {
@@ -181,10 +193,10 @@ public class SlicingTree {
 
                 ArrayList<Integer> rightList = inode.getRightChild().getClockwiseMemberVertices();
                 ArrayList<Integer> leftList = inode.getLeftChild().getClockwiseMemberVertices();
-                ArrayList<Integer> mergedList = clockWiseMerge(rightList, leftList);
+                ArrayList<Integer> mergedList = clockWiseMerge(rightList, leftList, inode.getSlicingPath());
                 inode.setClockwiseMemberVertices(mergedList);
                 // need to prune inner vertices too
-                inode.pruneInteriorVertices();
+//                inode.pruneInteriorVertices();
             }
         }
         this.updated = true;
@@ -213,29 +225,67 @@ public class SlicingTree {
         return traveresedList;
     }
 
-    private ArrayList<Integer> clockWiseMerge(ArrayList<Integer> rightList, ArrayList<Integer> leftList) {
+    private ArrayList<Integer> clockWiseMerge(ArrayList<Integer> rightList, ArrayList<Integer> leftList, ArrayList<Integer> slicingPath) {
         // FIXME: wee need deepcopy, cloning does a shallow copy
-//        ArrayList<Integer> mergedList = (ArrayList<Integer>) rightList.clone();
+        //        ArrayList<Integer> mergedList = (ArrayList<Integer>) rightList.clone();
         // this is the deep copy function being used
-        ArrayList<Integer> mergedList = (ArrayList<Integer>) DeepCopier.deepCopy(rightList);
+        //        ArrayList<Integer> mergedList = (ArrayList<Integer>) DeepCopier.deepCopy(rightList);
+        ////        CircularList<Integer> targetList = new CircularList<Integer>((ArrayList<Integer>) DeepCopier.deepCopy(rightList));
+        //
+        //        int idx = 0;
+        //        int insertIdx = 1;
+        //        System.out.println("Trying to mege: " + rightList  + " and " + leftList);
+        //        for (int i = 0; i < leftList.size(); i++) {
+        //            System.out.println(mergedList);
+        //            Integer searchVertex = leftList.get(i);
+        //            idx = mergedList.indexOf(searchVertex);
+        //            if (idx != -1) {
+        //                insertIdx = idx + 1;
+        //            } else {
+        //                mergedList.add(insertIdx, searchVertex);
+        //
+        //                insertIdx += 1;
+        //            }
+        //            System.out.println(mergedList);
+        //            System.out.println("");
+        //        }
+        //        return mergedList;
 
-        int idx = 0;
-        int insertIdx = 1;
-        System.out.println("Iternation");
-        for (int i = 0; i < leftList.size(); i++) {
-            System.out.println(mergedList);
-            Integer searchVertex = leftList.get(i);
-            idx = mergedList.indexOf(searchVertex);
-            if (idx != -1) {
-                insertIdx = idx + 1;
-            } else {
-                mergedList.add(insertIdx, searchVertex);
+        ArrayList<Integer> mergedList = new ArrayList<Integer>();
 
-                insertIdx += 1;
+        Integer topElement = slicingPath.get(0);
+        Integer bottomElement = slicingPath.get(slicingPath.size() - 1);
+
+        try {
+
+            CircularList<Integer> rightCircularList = new CircularList<Integer>(rightList, topElement);
+            CircularList<Integer> leftCircularList = new CircularList<Integer>(leftList, bottomElement);
+
+            System.out.println("Trying to merge: " + rightList + " and " + leftList + " with slicing path " + slicingPath);
+
+            Integer element;
+
+            mergedList.add(topElement);
+
+            element = rightCircularList.getNext();
+            while (element.intValue() != bottomElement.intValue()) {
+                mergedList.add(element);
+                element = rightCircularList.getNext();
             }
-            System.out.println(mergedList);
-            System.out.println("");
-        }        
+
+            System.out.println("After right merging: " + mergedList);
+
+            mergedList.add(bottomElement);
+            element = leftCircularList.getNext();
+            while (element.intValue() != topElement.intValue()) {
+                mergedList.add(element);
+                element = leftCircularList.getNext();
+            }
+            System.out.println("Merger List: " + mergedList);
+            return mergedList;
+        } catch (Exception ex) {
+//            Logger.getLogger(SlicingTree.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return mergedList;
     }
 }

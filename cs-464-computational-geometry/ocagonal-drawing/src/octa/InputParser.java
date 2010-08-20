@@ -15,14 +15,14 @@ public class InputParser {
     SlicingGraph graph;
     SlicingTree tree;
     String fileName;
-    ArrayList<String> inputStings;
+    ArrayList<String> inputStrings;
     int i;
 
     public InputParser(String fileName, SlicingGraph graph, SlicingTree tree) {
         this.fileName = fileName;
         this.tree = tree;
         this.graph = graph;
-        this.inputStings = new InputFileReader(fileName).getInputLines();
+        this.inputStrings = new InputFileReader(fileName).getInputLines();
     }
 
     public void parseInput() {
@@ -32,11 +32,11 @@ public class InputParser {
 
     private void parseGraph() {
         // update number of vertices
-        int numVertices = new Integer(inputStings.get(i++)).intValue();
+        int numVertices = new Integer(inputStrings.get(i++)).intValue();
         graph.setNumVertices(numVertices);
 
         for (int j = 0; j < numVertices; j++) {
-            String elems[] = inputStings.get(i++).split(" ");
+            String elems[] = inputStrings.get(i++).split(" ");
 
             ArrayList<Integer> adjList = new ArrayList<Integer>();
             for (String str : elems) {
@@ -53,11 +53,11 @@ public class InputParser {
         }
 
 
-        int numFaces = new Integer(inputStings.get(i++)).intValue();
+        int numFaces = new Integer(inputStrings.get(i++)).intValue();
         graph.setNumFaces(numFaces);
 
         for (int j = 0; j < numFaces; j++) {
-            String elems[] = inputStings.get(i++).split(" ");
+            String elems[] = inputStrings.get(i++).split(" ");
 
             ArrayList<Integer> memberVertices = new ArrayList<Integer>();
             for (String str : elems) {
@@ -78,14 +78,14 @@ public class InputParser {
 
     private void parseTree() {
         // calcuation for internal nodes
-        int numInternalNodes = new Integer(inputStings.get(i++)).intValue();
+        int numInternalNodes = new Integer(inputStrings.get(i++)).intValue();
         tree.setNumInternalNodes(numInternalNodes);
 //        System.out.println("Number of internal nodes (cuts): " + numInternalNodes);
 
         for (int j = 0; j < numInternalNodes; j++) {
             SlicingTreeInternalNode internalNode = new SlicingTreeInternalNode(j + 1);
 
-            String elems[] = inputStings.get(i++).split(" ");
+            String elems[] = inputStrings.get(i++).split(" ");
 
             // right now just set the parentId, we shall update the references with actual parents later
             int parent = new Integer(elems[0]).intValue();
@@ -120,14 +120,14 @@ public class InputParser {
         }
 
 
-        int numLeafNodes = new Integer(inputStings.get(i++)).intValue();
+        int numLeafNodes = new Integer(inputStrings.get(i++)).intValue();
         tree.setNumExternalNodes(numLeafNodes);
 //        System.out.println("Number of leaf nodes (faces): " + numLeafNodes);
 
         for (int j = 0; j < numLeafNodes; j++) {
             SlicingTreeExternalNode externalNode = new SlicingTreeExternalNode(j + 1);
 
-            String elems[] = inputStings.get(i++).split(" ");
+            String elems[] = inputStrings.get(i++).split(" ");
 
             int parentId = new Integer(elems[0]).intValue();
             externalNode.setParentId(parentId);
