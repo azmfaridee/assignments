@@ -1,4 +1,5 @@
 NOTES:
 
-- Input graph is an embedding
-- Need to define the output graph
+PENDING WORKS:
+    - calculate NWE, ENS, SEW and WSN path for each of the faces (trivial)
+    - we haven't touched the main algo yet
