@@ -28,7 +28,8 @@ public class LPath2 {
      */
     public static void initialize() {
 //        Input.openFile("longestPath.txt");
-        Input.openFile("input2.txt");
+//        Input.openFile("input2.txt");
+        Input.openFile("input3.txt");
 
         // reading input file, Vector vc has the data
         Vector<Double> vc = Input.readFile();
