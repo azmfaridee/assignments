@@ -73,4 +73,26 @@ public class SlicingGraph {
     public void setFaces(ArrayList<GraphFace> faces) {
         this.faces = faces;
     }
+
+    public ArrayList<GraphVertex> getVertices() {
+        return vertices;
+    }
+
+    public int getNumVertices() {
+        return numVertices;
+    }
+
+    public void setVertices(ArrayList<GraphVertex> vertices) {
+        this.vertices = vertices;
+    }
+
+    public GraphVertex getVertexById(int id){
+        for (GraphVertex graphVertex : vertices) {
+            if (graphVertex.getId() == id ) {
+                return graphVertex;
+            }
+        }
+        return null;
+    }
+    
 }

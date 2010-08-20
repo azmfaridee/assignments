@@ -107,6 +107,7 @@ public class SlicingTree {
                     System.out.println("Node " + node.getId() + " is an internal node with area: " + node.getFaceArea());
                     System.out.println("Node " + node.getId() + " is cut by path: " + ((SlicingTreeInternalNode) node).getSlicingPath());
 
+
                     SlicingTreeNode leftChild = ((SlicingTreeInternalNode) node).getLeftChild();
 
                     if (leftChild instanceof SlicingTreeInternalNode) {
@@ -126,6 +127,7 @@ public class SlicingTree {
                     System.out.println("Node " + node.getId() + " is an external node with face area of: " + node.getFaceArea());
                 }
                 System.out.println("Node " + node.getId() + " has member vertices: " + node.getClockwiseMemberVertices());
+                System.out.println("Node " + node.getId() + " has corner vertices: " + node.getCornetVertices());
             }
             System.out.println("Min Face Area: " + this.minFaceArea);
         }
@@ -137,6 +139,7 @@ public class SlicingTree {
      * 2. updates the minFaceArea
      * 3. update collective area of each internal node
      * 4. update the list of member vertices in each node in clockwise order
+     * 5. update the four cornet vertices
      */
     public void updateTree() {
         for (Iterator<SlicingTreeNode> it = nodeList.iterator(); it.hasNext();) {
@@ -178,7 +181,7 @@ public class SlicingTree {
             SlicingTreeNode node = nodeList.get(i);
 
             // root node does not have any parent, so it's parent does not need any updating
-            if (i > 0){
+            if (i > 0) {
                 SlicingTreeNode parent = nodeList.get(node.getParentId() - 1);
                 parent.setFaceArea(parent.getFaceArea() + node.getFaceArea());
             }
@@ -204,6 +207,31 @@ public class SlicingTree {
                 inode.setClockwiseMemberVertices(mergedList);
                 // need to prune inner vertices too
 //                inode.pruneInteriorVertices();
+            }
+        }
+
+
+
+
+        // update the corner vertices
+        for (int i = 0; i < nodeList.size() - 1; i++) {
+            SlicingTreeNode node = nodeList.get(i);
+
+            ArrayList<Integer> cornerVertices = new ArrayList<Integer>();
+            ArrayList<Integer> nodeBorderVertices = node.getClockwiseMemberVertices();
+
+            // special case for the root node
+            if (i == 0) {
+                SlicingTreeInternalNode inode = (SlicingTreeInternalNode) node;
+                for (Integer v : nodeBorderVertices) {
+                    if (graph.getVertexById(v.intValue()).getNumAdjVertex() == 2) {
+//                         v is a cornet vertex
+                        cornerVertices.add(v);
+                    }
+                }
+                inode.setCornetVertices(cornerVertices);
+//                System.out.println("CORNER VERTICES for node " + cornerVertices);
+            } else {
             }
         }
         this.updated = true;

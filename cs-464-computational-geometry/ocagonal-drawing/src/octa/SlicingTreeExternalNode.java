@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package octa;
 
 import java.util.ArrayList;
@@ -11,14 +10,21 @@ import java.util.ArrayList;
  *
  * @author abuzaher
  */
-public class SlicingTreeExternalNode implements SlicingTreeNode{
+public class SlicingTreeExternalNode implements SlicingTreeNode {
+
     private int faceArea;
     private int parentId;
     private int id;
     private ArrayList<Integer> clockwiseMemberVertices;
+    private int northWestVertex;
+    private int northEastVertex;
+    private int southEastVertex;
+    private int southWestVertex;
 
     public SlicingTreeExternalNode(int id) {
         this.id = id;
+        northEastVertex = northWestVertex = southEastVertex = southWestVertex = 0;
+
     }
 
     public void setFaceArea(int faceArea) {
@@ -49,4 +55,75 @@ public class SlicingTreeExternalNode implements SlicingTreeNode{
         this.clockwiseMemberVertices = clockwiseMemberVertices;
     }
 
+    /**
+     * @return the northWestVertex
+     */
+    public int getNorthWestVertex() {
+        return northWestVertex;
+    }
+
+    /**
+     * @param northWestVertex the northWestVertex to set
+     */
+    public void setNorthWestVertex(int northWestVertex) {
+        this.northWestVertex = northWestVertex;
+    }
+
+    /**
+     * @return the northEastVertex
+     */
+    public int getNorthEastVertex() {
+        return northEastVertex;
+    }
+
+    /**
+     * @param northEastVertex the northEastVertex to set
+     */
+    public void setNorthEastVertex(int northEastVertex) {
+        this.northEastVertex = northEastVertex;
+    }
+
+    /**
+     * @return the southEastVertex
+     */
+    public int getSouthEastVertex() {
+        return southEastVertex;
+    }
+
+    /**
+     * @param southEastVertex the southEastVertex to set
+     */
+    public void setSouthEastVertex(int southEastVertex) {
+        this.southEastVertex = southEastVertex;
+    }
+
+    /**
+     * @return the southWestVertex
+     */
+    public int getSouthWestVertex() {
+        return southWestVertex;
+    }
+
+    /**
+     * @param southWestVertex the southWestVertex to set
+     */
+    public void setSouthWestVertex(int southWestVertex) {
+        this.southWestVertex = southWestVertex;
+    }
+
+    public void setCornetVertices(ArrayList<Integer> cornetVertices) {
+        northEastVertex = cornetVertices.get(0);
+        southEastVertex = cornetVertices.get(1);
+        southWestVertex = cornetVertices.get(2);
+        northWestVertex = cornetVertices.get(3);
+    }
+
+    public ArrayList<Integer> getCornetVertices() {
+        ArrayList<Integer> cornerVertices = new ArrayList<Integer>();
+        cornerVertices.add(northEastVertex);
+        cornerVertices.add(southEastVertex);
+        cornerVertices.add(southWestVertex);
+        cornerVertices.add(northWestVertex);
+        return cornerVertices;
+    }
 }

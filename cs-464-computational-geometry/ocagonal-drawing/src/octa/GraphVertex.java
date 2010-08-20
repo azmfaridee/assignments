@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class GraphVertex {
     private ArrayList<Integer> clockwiseAdjList;
     private int id;
+    private int numAdjVertex;
 
     public GraphVertex(int id) {
         this.id = id;
@@ -31,6 +32,7 @@ public class GraphVertex {
      */
     public void setClockwiseAdjList(ArrayList<Integer> clockwiseAdjList) {
         this.clockwiseAdjList = clockwiseAdjList;
+        this.numAdjVertex = clockwiseAdjList.size();
     }
 
     /**
@@ -47,6 +49,9 @@ public class GraphVertex {
         this.id = id;
     }
 
-    
+    public int getNumAdjVertex() {
+        return numAdjVertex;
+    }
+
 
 }

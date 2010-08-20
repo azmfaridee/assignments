@@ -25,4 +25,24 @@ public interface SlicingTreeNode {
     public ArrayList<Integer> getClockwiseMemberVertices();
 
     public void setClockwiseMemberVertices(ArrayList<Integer> clockwiseMemberVertices);
+
+    public int getNorthWestVertex();
+
+    public void setNorthWestVertex(int northWestVertex);
+
+    public int getNorthEastVertex();
+
+    public void setNorthEastVertex(int northEastVertex);
+
+    public int getSouthEastVertex();
+
+    public void setSouthEastVertex(int southEastVertex);
+
+    public int getSouthWestVertex();
+
+    public void setSouthWestVertex(int southWestVertex);
+
+    public void setCornetVertices(ArrayList<Integer> cornetVertices);
+
+    public ArrayList<Integer> getCornetVertices();
 }
