@@ -20,11 +20,14 @@ public class SlicingTreeExternalNode implements SlicingTreeNode {
     private int northEastVertex;
     private int southEastVertex;
     private int southWestVertex;
+    private boolean isRightChild;
+    private SlicingTreeNode parent;
 
     public SlicingTreeExternalNode(int id) {
         this.id = id;
         northEastVertex = northWestVertex = southEastVertex = southWestVertex = 0;
-
+        isRightChild = false;
+        parent = null;
     }
 
     public void setFaceArea(int faceArea) {
@@ -125,5 +128,21 @@ public class SlicingTreeExternalNode implements SlicingTreeNode {
         cornerVertices.add(southWestVertex);
         cornerVertices.add(northWestVertex);
         return cornerVertices;
+    }
+
+    public boolean isIsRightChild() {
+        return isRightChild;
+    }
+
+    public void setIsRightChild(boolean isRightChild) {
+        this.isRightChild = isRightChild;
+    }
+
+    public void setParent(SlicingTreeNode parent) {
+        this.parent = parent;
+    }
+
+    public SlicingTreeNode getParent() {
+        return parent;
     }
 }

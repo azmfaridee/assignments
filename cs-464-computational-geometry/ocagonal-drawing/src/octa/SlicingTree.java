@@ -126,8 +126,12 @@ public class SlicingTree {
                 } else {
                     System.out.println("Node " + node.getId() + " is an external node with face area of: " + node.getFaceArea());
                 }
+                if (node.getParent() != null) {
+                    System.out.println("Parent of node " + node.getId() + " is: node " + node.getParent().getId() + " with vertices " + node.getParent().getClockwiseMemberVertices());
+                }
                 System.out.println("Node " + node.getId() + " has member vertices: " + node.getClockwiseMemberVertices());
                 System.out.println("Node " + node.getId() + " has corner vertices: " + node.getCornetVertices());
+                System.out.println("");
             }
             System.out.println("Min Face Area: " + this.minFaceArea);
         }
@@ -146,13 +150,17 @@ public class SlicingTree {
             SlicingTreeNode treeNode = it.next();
             int parentId = treeNode.getParentId();
             int parentIndex = parentId - 1;
+
             // update child parent relationship
             if (parentIndex > -1) {
                 SlicingTreeInternalNode parent = (SlicingTreeInternalNode) this.nodeList.get(parentIndex);
+
                 if (parent.getRightChild() == null) {
                     parent.setRightChild(treeNode);
+                    treeNode.setIsRightChild(true);
                 } else {
                     parent.setLeftChild(treeNode);
+                    treeNode.setIsRightChild(false);
                 }
                 // if you see that both the childs ref has been updated
                 if (parent.getLeftChild() != null && parent.getRightChild() != null) {
@@ -161,11 +169,21 @@ public class SlicingTree {
                     // the invalididy is due to the way we take the input from the user, we take internal nodes first, and external nodes later
                     // but if a node has both type of child, the external node must alwasys the right child in this case
                     if (parent.getRightChild() instanceof SlicingTreeInternalNode && parent.getLeftChild() instanceof SlicingTreeExternalNode) {
+                        // update the boolean values as well as real value
+
                         SlicingTreeNode temp = parent.getLeftChild();
+
+                        parent.getRightChild().setIsRightChild(false);
                         parent.setLeftChild(parent.getRightChild());
+
+                        temp.setIsRightChild(true);
                         parent.setRightChild(temp);
+
                     }
                 }
+
+                /// update parent pointer
+                treeNode.setParent(parent);
             }
             // update minFaceArea
             if (treeNode instanceof SlicingTreeExternalNode) {
@@ -175,6 +193,8 @@ public class SlicingTree {
                 }
             }
         }
+
+
         // update the collective area of each internal node
         // NOTE: the iteration must start form extenal nodes
         for (int i = nodeList.size() - 1; i >= 0; i--) {
@@ -214,26 +234,108 @@ public class SlicingTree {
 
 
         // update the corner vertices
-        for (int i = 0; i < nodeList.size() - 1; i++) {
-            SlicingTreeNode node = nodeList.get(i);
+        // this must be done in BFS manner
+        ArrayList<SlicingTreeNode> queue = new ArrayList<SlicingTreeNode>();
+        queue.add(nodeList.get(0));
+
+        while (!queue.isEmpty()) {
+            SlicingTreeNode node = queue.remove(0);
 
             ArrayList<Integer> cornerVertices = new ArrayList<Integer>();
             ArrayList<Integer> nodeBorderVertices = node.getClockwiseMemberVertices();
 
-            // special case for the root node
-            if (i == 0) {
+
+            // if root node
+            if (node.getId() == 1 && node instanceof SlicingTreeInternalNode) {
                 SlicingTreeInternalNode inode = (SlicingTreeInternalNode) node;
                 for (Integer v : nodeBorderVertices) {
                     if (graph.getVertexById(v.intValue()).getNumAdjVertex() == 2) {
-//                         v is a cornet vertex
+                        // v is a cornet vertex
                         cornerVertices.add(v);
                     }
                 }
                 inode.setCornetVertices(cornerVertices);
-//                System.out.println("CORNER VERTICES for node " + cornerVertices);
             } else {
+
+                SlicingTreeInternalNode parent = (SlicingTreeInternalNode) node.getParent();
+                if (node.isIsRightChild()) {
+                    if (parent.getCutType() == CutType.VERTICAL) {
+                        cornerVertices.add(parent.getCornetVertices().get(0));
+                        cornerVertices.add(parent.getCornetVertices().get(1));
+                        cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
+                        cornerVertices.add(parent.getSlicingPath().get(0));
+                        node.setCornetVertices(cornerVertices);
+                    } else {
+                        cornerVertices.add(parent.getCornetVertices().get(0));
+                        cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
+                        cornerVertices.add(parent.getSlicingPath().get(0));
+                        cornerVertices.add(parent.getCornetVertices().get(3));
+                        node.setCornetVertices(cornerVertices);
+                    }
+
+                } else {
+                    if (parent.getCutType() == CutType.VERTICAL) {
+                        cornerVertices.add(parent.getSlicingPath().get(0));
+                        cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
+                        cornerVertices.add(parent.getCornetVertices().get(2));
+                        cornerVertices.add(parent.getCornetVertices().get(3));
+                        node.setCornetVertices(cornerVertices);
+                    } else {
+                        cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
+                        cornerVertices.add(parent.getCornetVertices().get(1));
+                        cornerVertices.add(parent.getCornetVertices().get(2));
+                        cornerVertices.add(parent.getSlicingPath().get(0));
+                        node.setCornetVertices(cornerVertices);
+                    }
+                }
+
+            }
+
+            // add the left and right child to the queue
+            if (node instanceof SlicingTreeInternalNode) {
+                SlicingTreeInternalNode inode = (SlicingTreeInternalNode) node;
+                SlicingTreeNode rightChild = inode.getRightChild();
+                SlicingTreeNode leftChild = inode.getLeftChild();
+                queue.add(rightChild);
+                queue.add(leftChild);
             }
         }
+
+        // the same thing done withour BFS
+//        for (int i = 0; i < nodeList.size() - 1; i++) {
+//            SlicingTreeNode node = nodeList.get(i);
+//
+//            ArrayList<Integer> cornerVertices = new ArrayList<Integer>();
+//            ArrayList<Integer> nodeBorderVertices = node.getClockwiseMemberVertices();
+//
+//            // special case for the root node
+//            if (i == 0) {
+//                SlicingTreeInternalNode inode = (SlicingTreeInternalNode) node;
+//                for (Integer v : nodeBorderVertices) {
+//                    if (graph.getVertexById(v.intValue()).getNumAdjVertex() == 2) {
+////                         v is a cornet vertex
+//                        cornerVertices.add(v);
+//                    }
+//                }
+//                inode.setCornetVertices(cornerVertices);
+////                System.out.println("CORNER VERTICES for node " + cornerVertices);
+//            } else {
+//                SlicingTreeInternalNode parent = (SlicingTreeInternalNode) node.getParent();
+//                if (node.isIsRightChild()) {
+//                    cornerVertices.add(parent.getCornetVertices().get(0));
+//                    cornerVertices.add(parent.getCornetVertices().get(1));
+//                    cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
+//                    cornerVertices.add(parent.getSlicingPath().get(0));
+//                    node.setCornetVertices(cornerVertices);
+//                } else {
+//                    cornerVertices.add(parent.getSlicingPath().get(0));
+//                    cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
+//                    cornerVertices.add(parent.getCornetVertices().get(2));
+//                    cornerVertices.add(parent.getCornetVertices().get(3));
+//                    node.setCornetVertices(cornerVertices);
+//                }
+//            }
+//        }
         this.updated = true;
     }
 

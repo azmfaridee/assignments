@@ -45,4 +45,12 @@ public interface SlicingTreeNode {
     public void setCornetVertices(ArrayList<Integer> cornetVertices);
 
     public ArrayList<Integer> getCornetVertices();
+
+    public boolean isIsRightChild();
+
+    public void setIsRightChild(boolean isRightChild);
+
+    public void setParent(SlicingTreeNode parent) ;
+
+    public SlicingTreeNode getParent();
 }

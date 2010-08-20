@@ -24,6 +24,8 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
     private int northEastVertex;
     private int southEastVertex;
     private int southWestVertex;
+    private boolean isRightChild;
+    private SlicingTreeNode parent;
 
     public SlicingTreeInternalNode(int id) {
         this.id = id;
@@ -32,6 +34,7 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
         // set the initial area to zero
         this.faceArea = 0;
         northEastVertex = northWestVertex = southEastVertex = southWestVertex = 0;
+        parent = null;
     }
 
     public void setCutType(CutType cutType) {
@@ -186,4 +189,23 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
         cornerVertices.add(northWestVertex);
         return cornerVertices;
     }
+
+    public boolean isIsRightChild() {
+        return isRightChild;
+    }
+
+    public void setIsRightChild(boolean isRightChild) {
+        this.isRightChild = isRightChild;
+    }
+
+    public void setParent(SlicingTreeNode parent) {
+        this.parent = parent;
+    }
+
+    public SlicingTreeNode getParent() {
+        return parent;
+    }
+
+    
+    
 }
