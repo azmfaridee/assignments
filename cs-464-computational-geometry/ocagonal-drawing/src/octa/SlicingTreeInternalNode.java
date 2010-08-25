@@ -27,6 +27,18 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
     private boolean isRightChild;
     private SlicingTreeNode parent;
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        sb.append("I Node ID: ").append(this.id).append(", ");
+        sb.append("Vertices: ").append(this.clockwiseMemberVertices);
+        sb.append(")\n");
+        return sb.toString();
+    }
+
+    
+
     public SlicingTreeInternalNode(int id) {
         this.id = id;
         this.rightChild = null;

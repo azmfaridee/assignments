@@ -27,7 +27,7 @@ public class Main {
         System.out.println("PRINTING TREE INFO");
         tree.printInfo();
 
-        Drawing drawing = new Drawing(tree, graph);
+        GraphDrawer drawing = new GraphDrawer(tree, graph);
         drawing.runDrawringAlgo();
 //        System.out.println("REVERSE PREORDER TRAVERSAL OF TREE");
 //        tree.printInfo(tree.reversePreorderTraverse(0));
