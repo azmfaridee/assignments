@@ -15,7 +15,7 @@ public class LPath2 {
     public static Vector<Boolean> visited;
     public static double counter = 0;
     public static double initialPheromone = 5;
-    public static int ants = 1000;
+    public static int ants = 100;
     public static double evaporationRate = 0.5;
     public static double depositRate = 2;
     public static int numberIteration = 100;
@@ -27,9 +27,9 @@ public class LPath2 {
      * 1. Reads input form the file
      */
     public static void initialize() {
-//        Input.openFile("longestPath.txt");
+        Input.openFile("longestPath.txt");
 //        Input.openFile("input2.txt");
-        Input.openFile("input3.txt");
+//        Input.openFile("input3.txt");
 
         // reading input file, Vector vc has the data
         Vector<Double> vc = Input.readFile();

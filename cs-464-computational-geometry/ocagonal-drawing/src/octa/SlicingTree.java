@@ -426,4 +426,8 @@ public class SlicingTree {
         }
         return mergedList;
     }
+
+    SlicingTreeInternalNode getRoot() {
+        return (SlicingTreeInternalNode) this.nodeList.get(0);
+    }
 }
