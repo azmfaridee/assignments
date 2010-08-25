@@ -4,6 +4,8 @@
  */
 package octa;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author abuzaher
@@ -11,6 +13,18 @@ package octa;
 public class DrawnFace {
 
     private Coordinate a, xn1, xn2, b, ye, c, xs1, xs2, d, yw;
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        sb.append("a = ").append(a).append(", ");
+        sb.append("b = ").append(b).append(", ");
+        sb.append("c = ").append(c).append(", ");
+        sb.append("d = ").append(d).append(", ");
+        sb.append(")");
+        return sb.toString();
+    }
 
     /**
      * @return the a
@@ -150,5 +164,12 @@ public class DrawnFace {
      */
     public void setYw(Coordinate yw) {
         this.yw = yw;
+    }
+
+    public void setCornerVertices(ArrayList<Coordinate> list) {
+        setA(list.get(0));
+        setB(list.get(1));
+        setC(list.get(2));
+        setD(list.get(3));
     }
 }

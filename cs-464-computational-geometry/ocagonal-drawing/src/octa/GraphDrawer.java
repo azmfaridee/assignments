@@ -24,16 +24,6 @@ public class GraphDrawer {
     }
 
     public void runDrawringAlgo() {
-//        int area = root.getFaceArea();
-//        double faceHeight, faceWidth;
-//
-//        // we want the resulting face to be as much close to square as possible
-//        faceHeight = Math.floor(Math.sqrt(area));
-//        faceWidth = area / faceHeight;
-//        System.out.println("Heiht and width for root face is: " + faceHeight + " and " + faceWidth);
-//        System.out.println(getCartesianCoordinate(new Coordinate(0, 0), faceWidth, faceHeight));
-
-//        System.out.println(tree.reversePreorderTraverse(0));
         ArrayList<SlicingTreeNode> traversedList = tree.reversePreorderTraverse(0);
         for (Iterator<SlicingTreeNode> it = traversedList.iterator(); it.hasNext();) {
             SlicingTreeNode slicingTreeNode = it.next();
@@ -41,7 +31,17 @@ public class GraphDrawer {
                 if (slicingTreeNode.getId() == 1) {
                     // we have the root node
                     DrawnFace drawnRootFace = new DrawnFace();
-//                    drawnRootFace.
+                    int area = slicingTreeNode.getFaceArea();
+
+                    
+                    double faceHeight, faceWidth;
+                    // we want the resulting face to be as much close to square as possible
+                    faceHeight = Math.floor(Math.sqrt(area));
+                    faceWidth = area / faceHeight;
+
+                    ArrayList<Coordinate> cornerCoordinates = getCartesianCoordinate(new Coordinate(0, 0, true), faceWidth, faceHeight);
+                    drawnRootFace.setCornerVertices(cornerCoordinates);
+                    System.out.println(drawnRootFace);
                 } else {
                     // we have other Internal nodes that are not root
                 }
@@ -56,17 +56,14 @@ public class GraphDrawer {
 
     private ArrayList<Coordinate> getCartesianCoordinate(Coordinate leftBottom, double faceWidth, double faceHeight) {
         ArrayList<Coordinate> coordinateList = new ArrayList<Coordinate>();
-        coordinateList.add(leftBottom);
-
         Coordinate rightBottom = new Coordinate(leftBottom.getX() + faceWidth, leftBottom.getY(), true);
-        coordinateList.add(rightBottom);
-
         Coordinate rightTop = new Coordinate(leftBottom.getX() + faceWidth, leftBottom.getY() + faceWidth, true);
-        coordinateList.add(rightTop);
-
         Coordinate leftTop = new Coordinate(leftBottom.getX(), leftBottom.getY() + faceHeight, true);
-        coordinateList.add(leftTop);
 
+        coordinateList.add(leftTop);
+        coordinateList.add(rightTop);
+        coordinateList.add(rightBottom);
+        coordinateList.add(leftBottom);
         return coordinateList;
     }
 
