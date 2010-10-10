@@ -102,19 +102,19 @@ public class Ant {
 //        System.out.println("TABU NODE " + tabuNode);
 
         Integer currentNode = solution.getNodeByIndex(solution.getSize() - 1);
-        
+
 //        System.out.println("CURRENT " + currentNode);
 
         ArrayList possibleNeighbours = findAvailAbleNeighbours(currentNode);
-        
+
 //        System.out.println("NEIGHBOURS " + possibleNeighbours);
         // there will be at least one node
 //        possibleNeighbours.remove(possibleNeighbours.indexOf(tabuNode));
-        
+
         if (possibleNeighbours.isEmpty()) {
             return;
         }
-        
+
         int nextNode = getNextNode(currentNode, possibleNeighbours);
         findSolution(nextNode, false);
 //        System.out.println("NEW SOLUTION " + solution);
@@ -155,11 +155,16 @@ public class Ant {
         }
     }
 
-    public void depositPheromone() {
+    public void depositPheromone(double maxPheromoneThreshold) {
         double previousValue;
+        double newValue;
+
         for (int i = 0; i < solution.getSize() - 1; i++) {
             previousValue = pheromoneMatrix.get(i).get(i + 1);
-            pheromoneMatrix.get(i).set(i + 1, previousValue + pheromoneDepositAmount);
+            newValue = previousValue + pheromoneDepositAmount;
+            if (newValue < maxPheromoneThreshold) {
+                pheromoneMatrix.get(i).set(i + 1, newValue);
+            }
         }
     }
 

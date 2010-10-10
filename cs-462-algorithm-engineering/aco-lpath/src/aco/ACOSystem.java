@@ -26,6 +26,7 @@ public class ACOSystem {
     private double daemonPheromoneDepositAmount = 2.0;
     private double pheromoneEvaporationRate = 0.4;
     private double minPheromoneThreshold = 1.0;
+    private double maxPheromoneThreshold = 20.0;
     private Solution globalBestSolution;
     private int numIterations = 100;
     private int numAnts = 100;
@@ -108,7 +109,7 @@ public class ACOSystem {
                 // TODO: need to carefully randomize the intial ant start node
                 int startNode = random.nextInt(size);
                 ant.findSolution(startNode, true);
-                ant.depositPheromone();
+                ant.depositPheromone(maxPheromoneThreshold);
                 Solution solution = ant.getSolution();
 
 //                System.out.println("ITERATION: " +  i + ", ANT: " + j );
@@ -150,7 +151,12 @@ public class ACOSystem {
         // more pheromone deposit in the best solution
         for (int i = 0; i < localBestSolution.getSize() - 1; i++) {
             double value = pheromoneMatrix.get(i).get(i + 1);
-            pheromoneMatrix.get(i).set(i + 1, value + daemonPheromoneDepositAmount);
+            value = value + daemonPheromoneDepositAmount;
+            if (value < maxPheromoneThreshold) {
+                pheromoneMatrix.get(i).set(i + 1, value);
+            } else {
+//                System.out.println("EXCEED");
+            }
         }
     }
 
@@ -205,6 +211,13 @@ public class ACOSystem {
     }
 
     private void checkHamiltonianCycle(Solution localBestSolution) {
-        
+    }
+
+    public void setMaxPheromoneThreshold(double maxPheromoneThreshold) {
+        this.maxPheromoneThreshold = maxPheromoneThreshold;
+    }
+
+    public void setMinPheromoneThreshold(double minPheromoneThreshold) {
+        this.minPheromoneThreshold = minPheromoneThreshold;
     }
 }

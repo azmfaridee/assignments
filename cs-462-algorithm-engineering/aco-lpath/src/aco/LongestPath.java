@@ -17,9 +17,11 @@ public class LongestPath {
         int numIterations = 100;
         int numAnts = 100;
         double initialPheromoneAmount = 10.0;
-        double antPheromoneDepositAmount = 0.0;
+        double antPheromoneDepositAmount = 1.0;
         double daemonPheromoneDepositAmount = 1.0;
-        double pheromoneEvaporationRate = 0.4;
+        double pheromoneEvaporationRate = 0.3;
+        double maxPheromoneThreshold = 20;
+        double minPheromoneThreshold = 1.0;
 
 
         for (int i = 0; i < 10; i++) {
@@ -34,6 +36,7 @@ public class LongestPath {
             inputList = Reader.readFile();
             Reader.closeFile();
 
+            // setting all the parameters
             acoSystem = new ACOSystem(inputList);
             acoSystem.setNumIterations(numIterations);
             acoSystem.setNumAnts(numAnts);
@@ -41,6 +44,8 @@ public class LongestPath {
             acoSystem.setAntPheromoneDepositAmount(antPheromoneDepositAmount);
             acoSystem.setDaemonPheromoneDepositAmount(daemonPheromoneDepositAmount);
             acoSystem.setPheromoneEvaporationRate(pheromoneEvaporationRate);
+            acoSystem.setMinPheromoneThreshold(minPheromoneThreshold);
+            acoSystem.setMaxPheromoneThreshold(maxPheromoneThreshold);
 
             acoSystem.run();
 
