@@ -86,13 +86,12 @@ public class SlicingGraph {
         this.vertices = vertices;
     }
 
-    public GraphVertex getVertexById(int id){
+    public GraphVertex getVertexById(int id) {
         for (GraphVertex graphVertex : vertices) {
-            if (graphVertex.getId() == id ) {
+            if (graphVertex.getId() == id) {
                 return graphVertex;
             }
         }
         return null;
     }
-    
 }

@@ -130,7 +130,7 @@ public class SlicingTree {
                     System.out.println("Parent of node " + node.getId() + " is: node " + node.getParent().getId() + " with vertices " + node.getParent().getClockwiseMemberVertices());
                 }
                 System.out.println("Node " + node.getId() + " has member vertices: " + node.getClockwiseMemberVertices());
-                System.out.println("Node " + node.getId() + " has corner vertices: " + node.getCornetVertices());
+                System.out.println("Node " + node.getId() + " has corner vertices: " + node.getCornerVertices());
                 System.out.println("");
             }
             System.out.println("Min Face Area: " + this.minFaceArea);
@@ -260,16 +260,16 @@ public class SlicingTree {
                 SlicingTreeInternalNode parent = (SlicingTreeInternalNode) node.getParent();
                 if (node.isIsRightChild()) {
                     if (parent.getCutType() == CutType.VERTICAL) {
-                        cornerVertices.add(parent.getCornetVertices().get(0));
-                        cornerVertices.add(parent.getCornetVertices().get(1));
+                        cornerVertices.add(parent.getCornerVertices().get(0));
+                        cornerVertices.add(parent.getCornerVertices().get(1));
                         cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
                         cornerVertices.add(parent.getSlicingPath().get(0));
                         node.setCornetVertices(cornerVertices);
                     } else {
-                        cornerVertices.add(parent.getCornetVertices().get(0));
+                        cornerVertices.add(parent.getCornerVertices().get(0));
                         cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
                         cornerVertices.add(parent.getSlicingPath().get(0));
-                        cornerVertices.add(parent.getCornetVertices().get(3));
+                        cornerVertices.add(parent.getCornerVertices().get(3));
                         node.setCornetVertices(cornerVertices);
                     }
 
@@ -277,13 +277,13 @@ public class SlicingTree {
                     if (parent.getCutType() == CutType.VERTICAL) {
                         cornerVertices.add(parent.getSlicingPath().get(0));
                         cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
-                        cornerVertices.add(parent.getCornetVertices().get(2));
-                        cornerVertices.add(parent.getCornetVertices().get(3));
+                        cornerVertices.add(parent.getCornerVertices().get(2));
+                        cornerVertices.add(parent.getCornerVertices().get(3));
                         node.setCornetVertices(cornerVertices);
                     } else {
                         cornerVertices.add(parent.getSlicingPath().get(parent.getSlicingPath().size() - 1));
-                        cornerVertices.add(parent.getCornetVertices().get(1));
-                        cornerVertices.add(parent.getCornetVertices().get(2));
+                        cornerVertices.add(parent.getCornerVertices().get(1));
+                        cornerVertices.add(parent.getCornerVertices().get(2));
                         cornerVertices.add(parent.getSlicingPath().get(0));
                         node.setCornetVertices(cornerVertices);
                     }
@@ -430,4 +430,18 @@ public class SlicingTree {
     SlicingTreeInternalNode getRoot() {
         return (SlicingTreeInternalNode) this.nodeList.get(0);
     }
+
+    public int getMinFaceArea() {
+        return minFaceArea;
+    }
+
+    public int getNumExternalNodes() {
+        return numExternalNodes;
+    }
+
+    public int getNumInternalNodes() {
+        return numInternalNodes;
+    }
+
+    
 }

@@ -27,6 +27,51 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
     private boolean isRightChild;
     private SlicingTreeNode parent;
 
+    public  ArrayList<Integer> findPath(int startVertex, int endVertex) {
+        ArrayList<Integer> path = new ArrayList<Integer>();
+
+        int starIdx = clockwiseMemberVertices.indexOf(startVertex);
+        int endIdx = clockwiseMemberVertices.indexOf(endVertex);
+
+        if (starIdx < endIdx) {
+            path.addAll(clockwiseMemberVertices.subList(starIdx, endIdx + 1));
+        } else {
+            path.addAll(clockwiseMemberVertices.subList(starIdx, clockwiseMemberVertices.size()));
+            path.addAll(clockwiseMemberVertices.subList(0, endIdx + 1));
+        }
+
+        return path;
+    }
+
+    public ArrayList<ArrayList<Integer>> getAllPaths() {
+        ArrayList<ArrayList<Integer>> paths = new ArrayList<ArrayList<Integer>>();
+
+        ArrayList<Integer> northPath = findPath(northWestVertex, northEastVertex);
+        ArrayList<Integer> eastPath = findPath(northEastVertex, southEastVertex);
+        ArrayList<Integer> southPath = findPath(southEastVertex, southWestVertex);
+        ArrayList<Integer> westPath = findPath(southWestVertex, northWestVertex);
+
+        paths.add(northPath);
+        paths.add(eastPath);
+        paths.add(southPath);
+        paths.add(westPath);
+
+        return paths;
+
+    }
+
+    public void printPaths() {
+        ArrayList<Integer> northPath = findPath(northWestVertex, northEastVertex);
+        ArrayList<Integer> eastPath = findPath(northEastVertex, southEastVertex);
+        ArrayList<Integer> southPath = findPath(southEastVertex, southWestVertex);
+        ArrayList<Integer> westPath = findPath(southWestVertex, northWestVertex);
+
+        System.out.println("North Path: " + northPath);
+        System.out.println("North Path: " + eastPath);
+        System.out.println("North Path: " + southPath);
+        System.out.println("North Path: " + westPath);
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -36,8 +81,6 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
         sb.append(")\n");
         return sb.toString();
     }
-
-    
 
     public SlicingTreeInternalNode(int id) {
         this.id = id;
@@ -193,7 +236,7 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
         northWestVertex = cornetVertices.get(3);
     }
 
-    public ArrayList<Integer> getCornetVertices() {
+    public ArrayList<Integer> getCornerVertices() {
         ArrayList<Integer> cornerVertices = new ArrayList<Integer>();
         cornerVertices.add(northEastVertex);
         cornerVertices.add(southEastVertex);
@@ -201,6 +244,7 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
         cornerVertices.add(northWestVertex);
         return cornerVertices;
     }
+    
 
     public boolean isIsRightChild() {
         return isRightChild;
@@ -218,6 +262,19 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
         return parent;
     }
 
-    
-    
+//    public Coordinate getNorthWestVertexCoord(){
+//        return getNorthWestVertex();
+//    }
+//
+//    public Coordinate getNorthEastVertexCoord(){
+//        return null;
+//    }
+//
+//    public Coordinate getSouthWestVertexCoord(){
+//        return null;
+//    }
+//
+//    public Coordinate getSouthEastVertexCoord(){
+//        return null;
+//    }
 }

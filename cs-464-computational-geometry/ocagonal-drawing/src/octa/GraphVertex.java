@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package octa;
 
 import java.util.ArrayList;
@@ -12,12 +11,20 @@ import java.util.ArrayList;
  * @author abuzaher
  */
 public class GraphVertex {
+
     private ArrayList<Integer> clockwiseAdjList;
     private int id;
     private int numAdjVertex;
+    private boolean threeDegVertex;
+    private Coordinate coordinate;
 
     public GraphVertex(int id) {
         this.id = id;
+        this.threeDegVertex = false;
+    }
+
+    public boolean isThreeDegVertex() {
+        return threeDegVertex;
     }
 
     /**
@@ -33,6 +40,11 @@ public class GraphVertex {
     public void setClockwiseAdjList(ArrayList<Integer> clockwiseAdjList) {
         this.clockwiseAdjList = clockwiseAdjList;
         this.numAdjVertex = clockwiseAdjList.size();
+        if (numAdjVertex > 2) {
+            threeDegVertex = true;
+        } else {
+            threeDegVertex = false;
+        }
     }
 
     /**
@@ -53,5 +65,11 @@ public class GraphVertex {
         return numAdjVertex;
     }
 
+    public Coordinate getCoordinate() {
+        return coordinate;
+    }
 
+    public void setCoordinate(Coordinate coordinate) {
+        this.coordinate = coordinate;
+    }
 }

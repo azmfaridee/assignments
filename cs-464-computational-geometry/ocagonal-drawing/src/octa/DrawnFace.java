@@ -12,7 +12,18 @@ import java.util.ArrayList;
  */
 public class DrawnFace {
 
-    private Coordinate a, xn1, xn2, b, ye, c, xs1, xs2, d, yw;
+    private Coordinate a, xn1, xn2, b, ye, c, xs1, xs2, d, yw, yn, ys;
+    private ArrayList<Coordinate> eastPathVertices;
+
+    public DrawnFace() {
+        eastPathVertices = new ArrayList<Coordinate>();
+    }
+
+    public ArrayList<Coordinate> getEastPathVertices() {
+        return eastPathVertices;
+    }
+
+
 
     @Override
     public String toString() {
@@ -21,7 +32,7 @@ public class DrawnFace {
         sb.append("a = ").append(a).append(", ");
         sb.append("b = ").append(b).append(", ");
         sb.append("c = ").append(c).append(", ");
-        sb.append("d = ").append(d).append(", ");
+        sb.append("d = ").append(d);
         sb.append(")");
         return sb.toString();
     }
@@ -164,6 +175,22 @@ public class DrawnFace {
      */
     public void setYw(Coordinate yw) {
         this.yw = yw;
+    }
+
+    public Coordinate getYn() {
+        return yn;
+    }
+
+    public Coordinate getYs() {
+        return ys;
+    }
+
+    public void setYn(Coordinate yn) {
+        this.yn = yn;
+    }
+
+    public void setYs(Coordinate ys) {
+        this.ys = ys;
     }
 
     public void setCornerVertices(ArrayList<Coordinate> list) {

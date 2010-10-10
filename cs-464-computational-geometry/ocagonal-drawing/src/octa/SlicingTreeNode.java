@@ -44,13 +44,19 @@ public interface SlicingTreeNode {
 
     public void setCornetVertices(ArrayList<Integer> cornetVertices);
 
-    public ArrayList<Integer> getCornetVertices();
+    public ArrayList<Integer> getCornerVertices();
 
     public boolean isIsRightChild();
 
     public void setIsRightChild(boolean isRightChild);
 
-    public void setParent(SlicingTreeNode parent) ;
+    public void setParent(SlicingTreeNode parent);
 
     public SlicingTreeNode getParent();
+
+    public ArrayList<Integer> findPath(int startVertex, int endVertex);
+
+    public ArrayList<ArrayList<Integer>> getAllPaths();
+
+    public void printPaths();
 }

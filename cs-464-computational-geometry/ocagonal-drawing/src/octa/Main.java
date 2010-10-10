@@ -15,11 +15,11 @@ public class Main {
      */
     public static void main(String argv[]) {
         String fileName = "src/octa/input.txt";
-        
+
         SlicingGraph graph = new SlicingGraph();
         SlicingTree tree = new SlicingTree(graph);
         InputParser parser = new InputParser(fileName, graph, tree);
-        
+
         parser.parseInput();
 
         System.out.println("PRINTING GRAPH INFO");

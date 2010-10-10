@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package octa;
 
 import java.util.ArrayList;
@@ -12,13 +11,14 @@ import java.util.ArrayList;
  * @author abuzaher
  */
 public class GraphFace {
+
     private int id;
     private ArrayList<Integer> clockwiseMemberVertices;
 
     public GraphFace(int id) {
         this.id = id;
     }
- 
+
     /**
      * @return the id
      */
@@ -46,7 +46,4 @@ public class GraphFace {
     public void setClockwiseMemberVertices(ArrayList<Integer> clockwiseMemberVertices) {
         this.clockwiseMemberVertices = clockwiseMemberVertices;
     }
-
-    
-
 }

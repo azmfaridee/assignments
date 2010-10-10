@@ -37,7 +37,7 @@ public class InputFileReader {
         }
     }
 
-    public ArrayList<String> getInputLines(){
+    public ArrayList<String> getInputLines() {
         return this.lines;
     }
 }
