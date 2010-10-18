@@ -34,4 +34,18 @@ public class Utility {
         }
         return index;
     }
+
+    static int getRandomNodeIndexV2(ArrayList<Double> probabilityDistribution) {
+        System.out.println(probabilityDistribution);
+        Double rand;
+        int index = 0;
+        for (int i = 0; i < probabilityDistribution.size(); i++) {
+            rand = Math.random();
+            if (rand > probabilityDistribution.get(i));
+            index = i;
+            break;
+        }
+        System.out.println(index);
+        return index;
+    }
 }

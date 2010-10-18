@@ -21,9 +21,10 @@ public class Ant {
     double alpha;
     double beta;
     double pheromoneDepositAmount;
+    double exploitationFactor;
 
     public Ant(ArrayList<ArrayList<Double>> adjacencyMatrix, ArrayList<ArrayList<Double>> pheromoneMatrix,
-            double alpha, double beta, double pheromoneDepositAmount, ArrayList<Integer> neighbourCount) {
+            double alpha, double beta, double pheromoneDepositAmount, ArrayList<Integer> neighbourCount, double exploitationFactor) {
 
         this.adjacencyMatrix = adjacencyMatrix;
         this.pheromoneMatrix = pheromoneMatrix;
@@ -33,6 +34,7 @@ public class Ant {
         this.beta = beta;
         this.pheromoneDepositAmount = pheromoneDepositAmount;
         this.neighbourCount = neighbourCount;
+        this.exploitationFactor = exploitationFactor;
 
         this.visitedStates = new ArrayList<Boolean>();
         for (int i = 0; i < size; i++) {
@@ -63,15 +65,28 @@ public class Ant {
         double pheromone;
         double probability;
         ArrayList<Double> probabilityDistribution = new ArrayList<Double>();
+        Double maxNeighbourValue = 0.0;
+        int maxNeighbourIndex = 0;
+        Double product;
         int nextNodeIndex;
 
+        // calculate the sum
         for (int i = 0; i < neighbours.size(); i++) {
             edgeCost = adjacencyMatrix.get(currentNode).get(neighbours.get(i));
             pheromone = pheromoneMatrix.get(currentNode).get(neighbours.get(i));
 
 //            sum += Math.pow(pheromone, alpha) * Math.pow(edgeCost * neighbourCount.get(neighbours.get(i)), beta);
 //            sum += Math.pow(pheromone, alpha) * Math.pow(neighbourCount.get(neighbours.get(i)), beta);
-            sum += Math.pow(pheromone, alpha) * Math.pow(edgeCost, beta);
+            product = Math.pow(pheromone, alpha) * Math.pow(edgeCost, beta);
+            if (product > maxNeighbourValue) {
+                maxNeighbourValue = product;
+                maxNeighbourIndex = i;
+            }
+            sum += product;
+        }
+
+        if (Math.random() <= exploitationFactor) {
+            return neighbours.get(maxNeighbourIndex);
         }
 
         for (int i = 0; i < neighbours.size(); i++) {
@@ -86,6 +101,7 @@ public class Ant {
         }
 
         nextNodeIndex = Utility.getRandomNodeIndex(probabilityDistribution);
+//        nextNodeIndex = Utility.getRandomNodeIndex2(probabilityDistribution);
         return neighbours.get(nextNodeIndex);
     }
 
@@ -107,11 +123,16 @@ public class Ant {
 
         ArrayList possibleNeighbours = findAvailAbleNeighbours(currentNode);
 
-//        System.out.println("NEIGHBOURS " + possibleNeighbours);
+
         // there will be at least one node
-//        possibleNeighbours.remove(possibleNeighbours.indexOf(tabuNode));
+//        System.out.println("POSSIBLE NEIGHTBOURS " + possibleNeighbours);
+
+        possibleNeighbours.remove(possibleNeighbours.indexOf(tabuNode));
+
+//        System.out.println("NEIGHBOURS " + possibleNeighbours);
 
         if (possibleNeighbours.isEmpty()) {
+//            System.out.println("BAD NEWS: NO GOOD NEIGHBOURS");
             return;
         }
 
@@ -120,7 +141,7 @@ public class Ant {
 //        System.out.println("NEW SOLUTION " + solution);
     }
 
-    public void findSolution(Integer currentNode, boolean firstCall) {
+    public void findSolution(int currentNode, boolean firstCall) {
 
         // mark this node as visited
         visitedStates.set(currentNode, Boolean.TRUE);
@@ -156,14 +177,19 @@ public class Ant {
     }
 
     public void depositPheromone(double maxPheromoneThreshold) {
-        double previousValue;
-        double newValue;
+        double value1, value2;
 
         for (int i = 0; i < solution.getSize() - 1; i++) {
-            previousValue = pheromoneMatrix.get(i).get(i + 1);
-            newValue = previousValue + pheromoneDepositAmount;
-            if (newValue < maxPheromoneThreshold) {
-                pheromoneMatrix.get(i).set(i + 1, newValue);
+            value1 = pheromoneMatrix.get(solution.getNodeByIndex(i)).get(solution.getNodeByIndex(i + 1));
+            value2 = pheromoneMatrix.get(solution.getNodeByIndex(i + 1)).get(solution.getNodeByIndex(i));
+
+            value1 += pheromoneDepositAmount;
+            value2 += pheromoneDepositAmount;
+            if (value1 < maxPheromoneThreshold) {
+                pheromoneMatrix.get(solution.getNodeByIndex(i)).set(solution.getNodeByIndex(i + 1), value1);
+            }
+            if (value2 < maxPheromoneThreshold) {
+                pheromoneMatrix.get(solution.getNodeByIndex(i + 1)).set(solution.getNodeByIndex(i), value2);
             }
         }
     }
@@ -174,5 +200,13 @@ public class Ant {
 
     public void setSolution(Solution solution) {
         this.solution = solution;
+    }
+
+    public ArrayList<Boolean> getVisitedStates() {
+        return visitedStates;
+    }
+
+    public void setExploitationFactor(double exploitationFactor) {
+        this.exploitationFactor = exploitationFactor;
     }
 }

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package octa;
+package octa.old;
 
 import java.util.ArrayList;
 
@@ -10,15 +10,11 @@ import java.util.ArrayList;
  *
  * @author abuzaher
  */
-public class SlicingTreeInternalNode implements SlicingTreeNode {
+public class SlicingTreeExternalNode implements SlicingTreeNode {
 
-    private CutType cutType;
-    private int id;
-    private int parentId;
-    private SlicingTreeNode rightChild;
-    private SlicingTreeNode leftChild;
-    private ArrayList<Integer> slicingPath;
     private int faceArea;
+    private int parentId;
+    private int id;
     private ArrayList<Integer> clockwiseMemberVertices;
     private int northWestVertex;
     private int northEastVertex;
@@ -76,101 +72,45 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        sb.append("I Node ID: ").append(this.id).append(", ");
+        sb.append("E Node ID: ").append(this.id).append(", ");
         sb.append("Vertices: ").append(this.clockwiseMemberVertices);
         sb.append(")\n");
         return sb.toString();
     }
 
-    public SlicingTreeInternalNode(int id) {
+    public SlicingTreeExternalNode(int id) {
         this.id = id;
-        this.rightChild = null;
-        this.leftChild = null;
-        // set the initial area to zero
-        this.faceArea = 0;
         northEastVertex = northWestVertex = southEastVertex = southWestVertex = 0;
+        isRightChild = false;
         parent = null;
-    }
-
-    public void setCutType(CutType cutType) {
-        this.cutType = cutType;
-    }
-
-    public void setSlicingPath(ArrayList<Integer> slicingPath) {
-        this.slicingPath = slicingPath;
-    }
-
-    public void setParentId(int parentId) {
-        this.parentId = parentId;
-    }
-
-    public void setRightChild(SlicingTreeNode rightChild) {
-        this.rightChild = rightChild;
-    }
-
-    public void setLeftChild(SlicingTreeNode leftChild) {
-        this.leftChild = leftChild;
-    }
-
-    public CutType getCutType() {
-        return cutType;
-    }
-
-    public ArrayList<Integer> getSlicingPath() {
-        return slicingPath;
-    }
-
-    public int getParentId() {
-        return this.parentId;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public SlicingTreeNode getLeftChild() {
-        return leftChild;
-    }
-
-    public SlicingTreeNode getRightChild() {
-        return rightChild;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getFaceArea() {
-        return this.faceArea;
     }
 
     public void setFaceArea(int faceArea) {
         this.faceArea = faceArea;
     }
 
-    /**
-     * @return the clockwiseMemberVertices
-     */
+    public void setParentId(int parentId) {
+        this.parentId = parentId;
+    }
+
+    public int getParentId() {
+        return this.parentId;
+    }
+
+    public int getFaceArea() {
+        return this.faceArea;
+    }
+
+    public int getId() {
+        return id;
+    }
+
     public ArrayList<Integer> getClockwiseMemberVertices() {
         return clockwiseMemberVertices;
     }
 
-    /**
-     * @param clockwiseMemberVertices the clockwiseMemberVertices to set
-     */
     public void setClockwiseMemberVertices(ArrayList<Integer> clockwiseMemberVertices) {
         this.clockwiseMemberVertices = clockwiseMemberVertices;
-    }
-
-    public void pruneInteriorVertices() {
-        for (int i = 1; i < this.slicingPath.size() - 1; i++) {
-            Integer innerVertex = this.slicingPath.get(i);
-            int index = this.getClockwiseMemberVertices().indexOf(innerVertex);
-            if (index != -1) {
-                // we have found an innter vertex which is invalid
-                this.getClockwiseMemberVertices().remove(innerVertex);
-            }
-        }
     }
 
     /**
@@ -244,7 +184,6 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
         cornerVertices.add(northWestVertex);
         return cornerVertices;
     }
-    
 
     public boolean isIsRightChild() {
         return isRightChild;
@@ -261,20 +200,4 @@ public class SlicingTreeInternalNode implements SlicingTreeNode {
     public SlicingTreeNode getParent() {
         return parent;
     }
-
-//    public Coordinate getNorthWestVertexCoord(){
-//        return getNorthWestVertex();
-//    }
-//
-//    public Coordinate getNorthEastVertexCoord(){
-//        return null;
-//    }
-//
-//    public Coordinate getSouthWestVertexCoord(){
-//        return null;
-//    }
-//
-//    public Coordinate getSouthEastVertexCoord(){
-//        return null;
-//    }
 }
