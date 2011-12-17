@@ -5,9 +5,9 @@ MAIN = hadoopdb-presentations
 all:	$(MAIN)
 hadoopdb-presentations: $(MAIN).tex $(MAIN).bib
 	$(LATEX) $(MAIN)
-	$(BIBTEX) $(MAIN)
+#	$(BIBTEX) $(MAIN)
 	$(LATEX) $(MAIN)
-	$(LATEX) $(MAIN)
+#	$(LATEX) $(MAIN)
 	open $(MAIN).pdf
 
 clean:

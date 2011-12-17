@@ -28,10 +28,9 @@
 % \setbeamertemplate{background}{\includegraphics[width=1\textwidth]{natfak_baggrund.pdf}}
 % \logo{\includegraphics[width=1cm]{billeder/logo}}
 
-\title{Calculating Longest Path in Weighted Undirected Graphs Using
-  Ant Colony Based Metaheuristic}
+\title{High Performance Query Execution in a Scalable Heterogeneous Distributed Environment with Fault Tolerance}
 % \subtitle{}
-\author{Abu Zaher Md. Faridee\\ Ahmed Mehedi Nizam\\ Tanvir Irfan}
+\author{Abu Zaher Md. Faridee\\  Samir Hasan \\ Wasik Mursalin Rushafi}
 \institute{Department of Computer Science\\Bangladesh University of
   Engineering and Technology} \date{\today{}}
 
@@ -48,7 +47,6 @@
   \tableofcontents[pausesection]
 }
 
-
 % \begin{block}{Kryptering med kaotiske kredsløb}
 %   \begin{columns}
 %     \column{.3\textwidth} \hspace{0.5cm}
@@ -60,116 +58,120 @@
 \section{Introduction}
 \label{sec:introduction}
 
-\subsection{The Longest Path Problem}
+% \subsection{The Longest Path Problem}
+% \label{sec:problem-definition}
+
+\subsection{Problem Definition}
 \label{sec:problem-definition}
 
-\frame{
 
-  \frametitle{The Longest Path Problem}
+% \frame{
 
-  \begin{block}{Definition}
+%   \frametitle{The Longest Path Problem}
 
-    Given an undirected graph $G = (V, E)$, where $V$ is the set of
-    $n$ vertices and $E$ is the set of $m$ edges, for all $u, v \in
-    V$, find the highest cost path from $u$ to $v$, visiting a vertex
-    only once
-  \end{block}
+%   \begin{block}{Definition}
 
-  \begin{itemize}
-  \item For \emph{Weighted Graphs}, the \emph{Longest Path} is the
-    path that has the highest sum of weights of it's edges
-  \item For \emph{Unweighted Graphs}, the \emph{Longest Path} is the
-    path that contains the most number of edges
-  \item Covering all the vertices is not mandatory
-  \end{itemize}
+%     Given an undirected graph $G = (V, E)$, where $V$ is the set of
+%     $n$ vertices and $E$ is the set of $m$ edges, for all $u, v \in
+%     V$, find the highest cost path from $u$ to $v$, visiting a vertex
+%     only once
+%   \end{block}
 
-}
+%   \begin{itemize}
+%   \item For \emph{Weighted Graphs}, the \emph{Longest Path} is the
+%     path that has the highest sum of weights of it's edges
+%   \item For \emph{Unweighted Graphs}, the \emph{Longest Path} is the
+%     path that contains the most number of edges
+%   \item Covering all the vertices is not mandatory
+%   \end{itemize}
 
-
-\frame{
-  \frametitle{Example}
-  The bold edges denote the longest path for this graph, total cost is
-  45
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{lpath-best-sol}
-  \end{center}
-}
-
-\frame{
-  \frametitle{NP-Completeness}
-  \begin{block}{Reduction from \emph{Hamiltonian Path} Problem}
-    \begin{itemize}
-    \item Given an instance $G' = (V' ,E')$ for \emph{Hamiltonian
-        Path}, count the number $|V'|$ of nodes in $G'$ and output the
-      instance $G = G',K = |V '|$ for \emph{Longest Path}.
-    \item $G'$ has a simple path of length $|V'|$ if and only if
-      $|G'|$ has a Hamiltonian path.
-    \end{itemize}
-  \end{block}
-  The problem is NP-Complete even if there is no \emph{Hamiltonian
-    Path}, as we are trying to visit as much vertices as possible }
+% }
 
 
-\subsection{Applications}
-\label{sec:Applications}
+% \frame{
+%   \frametitle{Example}
+%   The bold edges denote the longest path for this graph, total cost is
+%   45
+%   \begin{center}
+%     \includegraphics[width=0.7\textwidth]{lpath-best-sol}
+%   \end{center}
+% }
 
-\frame{
-  \frametitle{Applications}
-  \begin{itemize}
-  \item Appears as a subproblem in path planning, networking and in
-    many other industrial and logistic applications
-  \item Portugal and Rocha [cite needed] used \emph{Longest Path} to
-    patrol a graph with multiple robots when there is no
-    \emph{Eulerian} and \emph{Hamiltonian Path}
-  \end{itemize}
-}
-
-\subsection{Previous Works}
-
-\frame{
-  \frametitle{Previous Works }
-
-  \begin{itemize}
-  \item Karger [cite needed] first proposed a polynomial time
-    approximation algorithm for weighted undirected graphs, but with
-    limited performance
-  \item Portugal and Rocha [cite needed] used a \emph{Genetic
-      Algorithm} based approach in 2010
-  \end{itemize}
-}
+% \frame{
+%   \frametitle{NP-Completeness}
+%   \begin{block}{Reduction from \emph{Hamiltonian Path} Problem}
+%     \begin{itemize}
+%     \item Given an instance $G' = (V' ,E')$ for \emph{Hamiltonian
+%         Path}, count the number $|V'|$ of nodes in $G'$ and output the
+%       instance $G = G',K = |V '|$ for \emph{Longest Path}.
+%     \item $G'$ has a simple path of length $|V'|$ if and only if
+%       $|G'|$ has a Hamiltonian path.
+%     \end{itemize}
+%   \end{block}
+%   The problem is NP-Complete even if there is no \emph{Hamiltonian
+%     Path}, as we are trying to visit as much vertices as possible }
 
 
-\section{Basic Ant Colony Algorithm}
-\label{sec:basic-ant-colony}
+\subsection{Motivation}
+\label{sec:motivation}
 
-\frame{
+% \frame{
+%   \frametitle{Applications}
+%   \begin{itemize}
+%   \item Appears as a subproblem in path planning, networking and in
+%     many other industrial and logistic applications
+%   \item Portugal and Rocha [cite needed] used \emph{Longest Path} to
+%     patrol a graph with multiple robots when there is no
+%     \emph{Eulerian} and \emph{Hamiltonian Path}
+%   \end{itemize}
+% }
 
-  \frametitle{Ant Colony Optimization}
-  \begin{itemize}
-  \item A nature inspired algorithm based on the foraging behavior of
-    ants
-    % \item It's a constructive metaheuristic
-  \item Has been successfully applied to solve several NP-hard
-    combinatorial optimization problems [cite needed], such as
-    traveling salesman problem [cite needed], vehicle routing problem
-    [cite needed], and quadratic assignment problem [cite needed]
-  \end{itemize}
+\subsection{Research Challenges}
 
-}
+% \frame{
+%   \frametitle{Previous Works }
 
-\frame{
-  \frametitle{The Basics of ACO}
-  \begin{itemize}
-  \item Model the given problem as a searching problem in a graph
-  \item Use artificial ants to construct the best path
-  \item Each ant puts a `trail' on it's discovered solution called
-    `\emph{pheromone}'
-  \item Each ant uses this \emph{`pheromone'} information to gradually
-    construct a better solution
-  \item This \emph{`pheromone'} is the globally shared memory of the
-    ants and the most powerful feature of ACO
-  \end{itemize}
-}
+%   \begin{itemize}
+%   \item Karger [cite needed] first proposed a polynomial time
+%     approximation algorithm for weighted undirected graphs, but with
+%     limited performance
+%   \item Portugal and Rocha [cite needed] used a \emph{Genetic
+%       Algorithm} based approach in 2010
+%   \end{itemize}
+% }
+
+
+\section{State of the Art}
+\label{sec:state-of-the-art}
+
+% \frame{
+
+%   \frametitle{Ant Colony Optimization}
+%   \begin{itemize}
+%   \item A nature inspired algorithm based on the foraging behavior of
+%     ants
+%     % \item It's a constructive metaheuristic
+%   \item Has been successfully applied to solve several NP-hard
+%     combinatorial optimization problems [cite needed], such as
+%     traveling salesman problem [cite needed], vehicle routing problem
+%     [cite needed], and quadratic assignment problem [cite needed]
+%   \end{itemize}
+
+% }
+
+% \frame{
+%   \frametitle{The Basics of ACO}
+%   \begin{itemize}
+%   \item Model the given problem as a searching problem in a graph
+%   \item Use artificial ants to construct the best path
+%   \item Each ant puts a `trail' on it's discovered solution called
+%     `\emph{pheromone}'
+%   \item Each ant uses this \emph{`pheromone'} information to gradually
+%     construct a better solution
+%   \item This \emph{`pheromone'} is the globally shared memory of the
+%     ants and the most powerful feature of ACO
+%   \end{itemize}
+% }
 
 % \frame{
 %   \frametitle{The Basic Equations of ACO}
@@ -185,207 +187,210 @@
 % }
 
 
-\section{Our Approach}
-\label{sec:our-approach}
+\section{Advantages and Disadvantages}
+\label{sec:advantages-and-disadvantages}
 
-\frame{
+% \frame{
 
-  \frametitle{Our Ant Colony Based Approach on Longest Path}
-  \begin{block}{Input}
-    \begin{itemize}
-    \item Adjacency matrix representation of the input graph
-    \item Parameter for ACO: $\alpha$ and $\beta$
-    \end{itemize}
-  \end{block}
+%   \frametitle{Our Ant Colony Based Approach on Longest Path}
+%   \begin{block}{Input}
+%     \begin{itemize}
+%     \item Adjacency matrix representation of the input graph
+%     \item Parameter for ACO: $\alpha$ and $\beta$
+%     \end{itemize}
+%   \end{block}
 
-  \begin{block}{Output}
-    \begin{itemize}
-    \item The \emph{Longest Path} (order of nodes to visit)
-    \item Cost of the \emph{Longest Path}
-    \end{itemize}
-  \end{block}
+%   \begin{block}{Output}
+%     \begin{itemize}
+%     \item The \emph{Longest Path} (order of nodes to visit)
+%     \item Cost of the \emph{Longest Path}
+%     \end{itemize}
+%   \end{block}
 
-  Most of the time $\alpha = 3$ and $\beta = 2$ produces the best
-  result [cite needed] }
+%   Most of the time $\alpha = 3$ and $\beta = 2$ produces the best
+%   result [cite needed] }
 
-\subsection{The Heuristic Function}
+% \subsection{The Heuristic Function}
 
-\frame{
-  \frametitle{The Heuristic Function}
+% \frame{
+%   \frametitle{The Heuristic Function}
 
-  \begin{block}{Value of the Heuristic Function $\eta(r, s)$}
-    \begin{itemize}
-    \item For weighted graphs, $\eta(r, s) = cost(r, s)$, where
-      $cost(r, s)$ is the weight/cost from node $r$ to node $s$
-    \item For un-weighted graphs, $\eta(r, s) = nbrcount(s)$ where
-      $nbrcount(s)$ is the number of neighbors of node $s$
-    \end{itemize}
-  \end{block}
-}
+%   \begin{block}{Value of the Heuristic Function $\eta(r, s)$}
+%     \begin{itemize}
+%     \item For weighted graphs, $\eta(r, s) = cost(r, s)$, where
+%       $cost(r, s)$ is the weight/cost from node $r$ to node $s$
+%     \item For un-weighted graphs, $\eta(r, s) = nbrcount(s)$ where
+%       $nbrcount(s)$ is the number of neighbors of node $s$
+%     \end{itemize}
+%   \end{block}
+% }
 
-\subsection{Local Search}
+% \subsection{Local Search}
 
-\frame{
-  \frametitle{Local Search}
+% \frame{
+%   \frametitle{Local Search}
+%   \begin{itemize}
+%   \item It is a well known fact that basic ACO algorithm is prone to
+%     \emph{Local optima}
+%   \item Two types of \emph{Local Search} implemented to circumvent
+%     this issue
+%     \begin{itemize}
+%     \item The Wise Ant
+%     \item The Missing Vertex Checker
+%     \end{itemize}
+%   \item After all the ants have completed their tour, the local best
+%     solution is put through these \emph{Local Search} procedures
+%   \end{itemize}
+% }
 
-  \begin{itemize}
-  \item It is a well known fact that basic ACO algorithm is prone to
-    \emph{Local optima}
-  \item Two types of \emph{Local Search} implemented to circumvent
-    this issue
-    \begin{itemize}
-    \item The Wise Ant
-    \item The Missing Vertex Checker
-    \end{itemize}
-  \item After all the ants have completed their tour, the local best
-    solution is put through these \emph{Local Search} procedures
-  \end{itemize}
-}
+% \frame{\frametitle{Local Search: Procedure 1}
+%   \begin{block}{Algorithm: The Wise Ant}
+%     \begin{itemize}
+%     \item Given a graph $G = (V, E)$ and a solution $S = [v_1, v_2,
+%       v_3, \ldots ~ \ldots, v_m]$, pick two consecutive nodes $v_i,
+%       v_{i+1}$ randomly from $S$ where $i \geq \lfloor m/2 \rfloor$
+%     \item Reconstruct the solution with the added restriction that the
+%       ant cannot go to $v_{i+1}$ from $v_i$
+%     \end{itemize}
+%   \end{block}
+%   \begin{itemize}
+%   \item If the local search produces a better solution, update the
+%     local best solution with this one
+%   \item To maximize efficiency, this search is applied to given
+%     solution twice, in both forward and reverse order
 
-\frame{\frametitle{Local Search: Procedure 1}
-  \begin{block}{Algorithm: The Wise Ant}
-    \begin{itemize}
-    \item Given a graph $G = (V, E)$ and a solution $S = [v_1, v_2,
-      v_3, \ldots ~ \ldots, v_m]$, pick two consecutive nodes $v_i,
-      v_{i+1}$ randomly from $S$ where $i \geq \lfloor m/2 \rfloor$
-    \item Reconstruct the solution with the added restriction that the
-      ant cannot go to $v_{i+1}$ from $v_i$
-    \end{itemize}
-  \end{block}
-  \begin{itemize}
-  \item If the local search produces a better solution, update the
-    local best solution with this one
-  \item To maximize efficiency, this search is applied to given
-    solution twice, in both forward and reverse order
+%   \end{itemize}
+% }
 
-  \end{itemize}
-}
+% \frame{
+%   \frametitle{Example: The Wise Ant - Before Local Search}
+%   Current cost is 43, current vertex is marked as \emph{grey}, tabu
+%   vertex is marked as \emph{green}
+%   \begin{center}
+%     \includegraphics[width=0.7\textwidth]{lpath-before-wiseant}
+%   \end{center}
+% }
 
-\frame{
-  \frametitle{Example: The Wise Ant - Before Local Search}
-  Current cost is 43, current vertex is marked as \emph{grey}, tabu
-  vertex is marked as \emph{green}
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{lpath-before-wiseant}
-  \end{center}
+% \frame{
+%   \frametitle{Example: The Wise Ant - After Local Search}
+%   After local search cost is maximized to 45
+%   \begin{center}
+%     \includegraphics[width=0.7\textwidth]{lpath-best-sol}
+%   \end{center}
 
-}
+% }
 
-\frame{
-  \frametitle{Example: The Wise Ant - After Local Search}
-  After local search cost is maximized to 45
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{lpath-best-sol}
-  \end{center}
+% \frame{
+%   \frametitle{Local Search: Procedure 2}
+%   Given a graph $G = (V, E)$, a solution $S = [v_1, v_2, v_3, \ldots ~
+%   \ldots, v_m]$ and list of unvisited nodes $U = [u_1, u_2, u_3,
+%   \ldots ~\ldots, u_{n-m}]$ % where $\forall{ v_i, u_j} \in V$,
+%   do the following:
+%   \begin{block}{Algorithm: The Missing Node Checker}
+%     \begin{algorithmic}
+%       \FORALL{$u_j \in U$} \FORALL{$v_i \in S$} \IF{$ cost(v_i, u_j) +
+%         cost(u_j, v_{j+1}) \geq cost(v_i, v_{i+1})$} \STATE Insert
+%       $u_j$ into $S$ after $v_i$
+%       \ENDIF
+%       \ENDFOR
+%       \ENDFOR
+%     \end{algorithmic}
+%   \end{block}
+% }
 
-}
+% \section{Experimental Results}
+% \label{sec:experimental-results}
 
-\frame{
-  \frametitle{Local Search: Procedure 2}
-  Given a graph $G = (V, E)$, a solution $S = [v_1, v_2, v_3, \ldots ~
-  \ldots, v_m]$ and list of unvisited nodes $U = [u_1, u_2, u_3,
-  \ldots ~\ldots, u_{n-m}]$ % where $\forall{ v_i, u_j} \in V$,
-  do the following:
-  \begin{block}{Algorithm: The Missing Node Checker}
-    \begin{algorithmic}
-      \FORALL{$u_j \in U$} \FORALL{$v_i \in S$} \IF{$ cost(v_i, u_j) +
-        cost(u_j, v_{j+1}) \geq cost(v_i, v_{i+1})$} \STATE Insert
-      $u_j$ into $S$ after $v_i$
-      \ENDIF
-      \ENDFOR
-      \ENDFOR
-    \end{algorithmic}
-  \end{block}
-}
+% \frame{\frametitle{Example: Missing Vertex Checker - Before Local
+%     Search} Unvisited node is marked as \emph{green}, two of it's
+%   adjacent visited nodes are marked as \emph{grey}, current cost is 38
+%   \begin{center}
+%     \includegraphics[width=0.7\textwidth]{lpath-missing-vertex-before}
+%   \end{center}
+% }
 
-\section{Experimental Results}
-\label{sec:experimental-results}
+% \frame{\frametitle{Example: Missing Vertex Checker - After Local
+%     Search} Missing vertex added to the path, now cost is 43
+%   \begin{center}
+%     \includegraphics[width=0.7\textwidth]{lpath-missing-vertex-after}
+%   \end{center}
+% }
 
-\frame{\frametitle{Example: Missing Vertex Checker - Before Local
-    Search} Unvisited node is marked as \emph{green}, two of it's
-  adjacent visited nodes are marked as \emph{grey}, current cost is 38
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{lpath-missing-vertex-before}
-  \end{center}
-}
+% \frame{
+%   \frametitle{Experimental Results}
+%   \begin{itemize}
+%   \item We compare our results with Portugal and Rocha's [cite needed]
+%     \emph{Genetic Algorithm} (GA) based approach
+%   \item They implemented 4 variants, two crossover based, one mutation
+%     based and one variant have both mutation and crossover
+%   \item Mutation based variant is the fastest one with good solution
+%     quality, we compare ours results with this variant
+%   \item We separately consider two type of graph classes,
+%     \emph{sparse} and \emph{dense}
+%   \end{itemize}
+% }
 
-\frame{\frametitle{Example: Missing Vertex Checker - After Local
-    Search} Missing vertex added to the path, now cost is 43
-  \begin{center}
-    \includegraphics[width=0.7\textwidth]{lpath-missing-vertex-after}
-  \end{center}
-}
+% \subsection{Sparse Graphs}
 
-\frame{
-  \frametitle{Experimental Results}
-  \begin{itemize}
-  \item We compare our results with Portugal and Rocha's [cite needed]
-    \emph{Genetic Algorithm} (GA) based approach
-  \item They implemented 4 variants, two crossover based, one mutation
-    based and one variant have both mutation and crossover
-  \item Mutation based variant is the fastest one with good solution
-    quality, we compare ours results with this variant
-  \item We separately consider two type of graph classes,
-    \emph{sparse} and \emph{dense}
-  \end{itemize}
-}
+% \frame{
+%   \frametitle{Sparse Graphs}
+%   \begin{itemize}
+%   \item Input graph has 134 nodes and 134 edges with an optimum value
+%     of 1556.0 for the longest path
+%   \item The GA is run with 400 \emph{chromosomes} for 10 iterations
+%   \item The ACO is run with 100 \emph{ants} for 10 iterations
+%   \end{itemize}
+%   \begin{block}{Comparison}
+%     \begin{center}
+%       \begin{tabular}[c]{c c c}
+%         & Genetic Algorithm & ACO\\
+%         \hline
+%         Success Rate & 34.0\% & 90.0\%  \\
+%         Quality &  95.7\% & 97.8\% \\
+%         Avg. Running Time (ms) & 319.3 & 297.5 
+%       \end{tabular}
+%     \end{center}
+%   \end{block}
+%   Success rate is calculated by running the whole algorithm 100 times
+% }
 
-\subsection{Sparse Graphs}
+% \subsection{Dense Graphs}
 
-\frame{
-  \frametitle{Sparse Graphs}
-  \begin{itemize}
-  \item Input graph has 134 nodes and 134 edges with an optimum value
-    of 1556.0 for the longest path
-  \item The GA is run with 400 \emph{chromosomes} for 10 iterations
-  \item The ACO is run with 100 \emph{ants} for 10 iterations
-  \end{itemize}
-  \begin{block}{Comparison}
-    \begin{center}
-      \begin{tabular}[c]{c c c}
-        & Genetic Algorithm & ACO\\
-        \hline
-        Success Rate & 34.0\% & 90.0\%  \\
-        Quality &  95.7\% & 97.8\% \\
-        Avg. Running Time (ms) & 319.3 & 297.5 
-      \end{tabular}
-    \end{center}
-  \end{block}
-  Success rate is calculated by running the whole algorithm 100 times
-}
+% \frame{
+%   \frametitle{Dense Graphs}
+%   \begin{itemize}
+%   \item Input graph has 30 nodes, 269 edges with optimum value 274.0
+%     for longest path
+%   \item The GA is run with 400 \emph{chromosomes} for 100 iterations
+%   \item The ACO is run with 100 \emph{ants} for 100 iterations
+%   \end{itemize}
+%   \begin{block}{Comparison}
+%     \begin{center}
+%       \begin{tabular}[c]{c c c}
+%         & Genetic Algorithm & ACO\\
+%         \hline
+%         Success Rate & 0\% & 20\%  \\
+%         Quality &  89.6\% & 99.4\% \\
+%         Avg. Running Time (ms) &  3546.7 & 2164.8 
+%       \end{tabular}
+%     \end{center}
+%   \end{block}
+% }
 
-\subsection{Dense Graphs}
-\frame{
-  \frametitle{Dense Graphs}
-  \begin{itemize}
-  \item Input graph has 30 nodes, 269 edges with optimum value 274.0
-    for longest path
-  \item The GA is run with 400 \emph{chromosomes} for 100 iterations
-  \item The ACO is run with 100 \emph{ants} for 100 iterations
-  \end{itemize}
-  \begin{block}{Comparison}
-    \begin{center}
-      \begin{tabular}[c]{c c c}
-        & Genetic Algorithm & ACO\\
-        \hline
-        Success Rate & 0\% & 20\%  \\
-        Quality &  89.6\% & 99.4\% \\
-        Avg. Running Time (ms) &  3546.7 & 2164.8 
-      \end{tabular}
-    \end{center}
-  \end{block}
-}
+\section{Future Research}
+\label{sec:future-research}
+
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-\frame{
-  \frametitle{Conclusion}
-  \begin{itemize}
-  \item Preliminary results show that our ACO based implementation
-    performs way better than GA.
-  \end{itemize}
-}
+% \frame{
+%   \frametitle{Conclusion}
+%   \begin{itemize}
+%   \item Preliminary results show that our ACO based implementation
+%     performs way better than GA.
+%   \end{itemize}
+% }
 
 \frame{
   \frametitle{Thank You}
