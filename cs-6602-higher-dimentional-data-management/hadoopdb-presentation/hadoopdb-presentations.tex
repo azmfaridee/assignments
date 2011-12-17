@@ -28,7 +28,7 @@
 % \setbeamertemplate{background}{\includegraphics[width=1\textwidth]{natfak_baggrund.pdf}}
 % \logo{\includegraphics[width=1cm]{billeder/logo}}
 
-\title{High Performance Query Execution in a Scalable Heterogeneous Distributed Environment with Fault Tolerance}
+\title{High Performance Query Execution in Analytical Databases over a Scalable Heterogeneous Distributed Environment with Fault Tolerance}
 % \subtitle{}
 \author{Abu Zaher Md. Faridee\\  Samir Hasan \\ Wasik Mursalin Rushafi}
 \institute{Department of Computer Science\\Bangladesh University of
@@ -64,6 +64,12 @@
 \subsection{Problem Definition}
 \label{sec:problem-definition}
 
+\begin{frame}
+  \frametitle{Problem Definition}
+  Given explosive amounts of data, design an analytical database
+  system that features performance, scalability, fault tolerance and
+  a flexible query interface
+\end{frame}
 
 % \frame{
 
@@ -115,6 +121,63 @@
 \subsection{Motivation}
 \label{sec:motivation}
 
+\begin{frame}
+  \frametitle{Major Trends}
+  \begin{itemize}
+  \item Data Explosion
+    \begin{itemize}
+    \item Automation of business processes, proliferation of digital
+      devices
+    \item eBay has a 6.5 petabyte warehouse.
+    \end{itemize}
+   \item Deep Analysis over Raw Data
+     \begin{itemize}
+     \item Inefficient to push data from database into specialized analysis
+       engines $\rightarrow$ process data in the database
+     \item Best price/performance $\rightarrow$ data partitioned across 100-1000s
+       of cheap, commodity, shared-nothing machines.
+     \item Clouds of processing nodes on demand, pay for what you use
+    \end{itemize}
+  \end{itemize}
+  \begin{block}{Bottom Line}
+    Processing massive structured data on 1000s of shared-nothing
+    nodes
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Analytical Data Processing}
+  \begin{itemize}
+  \item Online Analytical Processing (OLAP) is an approach to swiftly
+    answer online multi-dimensional analytical (MDA)
+    queries. %[Ref. http://en.wikipedia.org/wiki/Online_analytical_processing
+  % \item It is a read-only system that stores historical data on business
+  %   metrics.
+  \item Analytical Data Processing are done through Analytical Databases
+    which are often distributed systems among tens of nodes that
+    incorporate MPP (Massively Parallel Processing System)
+  \item The Analytical database market is growing steeply.
+  \item As of 2006 it consists of \$3.98 billion of the \$14.6 billion
+    database software market (27\%). Since then it is growing at a rate of 10.3\% annually.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Desired properties of a Data Analysis System in the
+    Petabyte Scale}
+  \begin{itemize}
+  \item {\bfseries{Performance}}: The system should be able run
+    optimized data analysis algorithms within the available hardware
+    resources.
+  \item {\bfseries{Fault Tolerance}}: For transactional workloads it should recover
+    from a failure without losing any data / updates from recently
+    committed transactions.
+  \item {\bfseries{Performance in Heterogeneous System}}: The system should perform
+    well with the addition more nodes which are varies in performance.
+  \item {\bfseries{Flexible Query Interface}}: Users should be able to querying the database over the network just like normal databases.
+  \end{itemize}
+\end{frame}
+
 % \frame{
 %   \frametitle{Applications}
 %   \begin{itemize}
@@ -126,7 +189,7 @@
 %   \end{itemize}
 % }
 
-\subsection{Research Challenges}
+% \subsection{Research Challenges}
 
 % \frame{
 %   \frametitle{Previous Works }
@@ -143,6 +206,48 @@
 
 \section{State of the Art}
 \label{sec:state-of-the-art}
+
+% \subsection{Some Background Knowledge}
+\begin{frame}
+  \frametitle{Shared Nothing Architecture: The popular choice for
+    Deploying Distributed Databases}
+  \begin{itemize}
+  \item A collection of independent (possibly virtual machines with local disk and local main memory) computer systems connected together a high speed network.
+  \item This type of systems are widely believed to scale the best.
+  \item Data analysis workloads (e.g. large scan operations, multidimensional aggregations, star schema joins) are fairly easy to parallelize across nodes  in a shared nothing network.
+  \end{itemize}
+\end{frame}
+
+\subsection{Available Approaches}
+
+\begin{frame}
+  \frametitle{Parallel DBMS}
+  \begin{itemize}
+  \item Analytical DBMS System deployed on a shared nothing
+    architecture.
+  \item Winner in the performance category.
+  \item Modern systems usually have great Query Interface which do no require highly trained DBAs
+  \item Do not run well in Heterogeneous environment. Very few systems
+    can do well in a hundred node system. And there are no reported
+    thousand node Parallel DBA.
+  \item Fault Tolerance level is low. Usually a query has to be restarted if it fails due to some node failure. General assumption is node failures are rare events.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Map Reduce}
+  \begin{itemize}
+  \item Process data in a shared nothing architecture in three basic
+    steps: Map, Repartition and Reduce.
+  \item Plans query execution on runtime which allows Map Reduce to be
+    fault tolerant.
+  \item Lack of a pre-planned query execution policy results in lesser
+    performance.
+  \item Perform well in heterogeneous environment by reassigning tasks
+    on slower nodes to faster nodes that has completed it’s job.
+  \item Flexible Query Interfaces can be incorporated via Query Translators like Apache Hive.
+  \end{itemize}
+\end{frame}
 
 % \frame{
 
@@ -186,9 +291,223 @@
 %   \end{block}
 % }
 
+\section{HadoopDB:  An Architectural Hybrid of MapReduce and DBMS}
 
-\section{Advantages and Disadvantages}
-\label{sec:advantages-and-disadvantages}
+\begin{frame}
+  \frametitle{Hadoop Basics}
+      \begin{center}
+      \includegraphics[width=0.7\textwidth]{Hadoop_Basics}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Architecture}
+      \begin{center}
+      \includegraphics[width=0.7\textwidth]{Architecture}
+    \end{center}
+\end{frame}
+
+\subsection{HadoopDB's Components}
+\begin{frame}
+  \frametitle{Components}
+  \begin{itemize}
+  \item Database Connector
+  \item Catalog
+  \item Data Loader
+  \item SQL to MapReduce to SQL (SMS) Planner
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SQL-MR-SQL (SMS): Hive Basics}
+  Hive Converts SQL queries into MapReduce jobs over HDFS files
+  \begin{itemize}
+  \item Derives schema of files from an internal catalog
+  \item Parses, plans, optimizes the SQL query into a relational
+    operator DAG
+  \item Breaks down plan into series of Map / Reduce task with
+    interleaving re-partition operators
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SQL-MR-SQL}
+  \begin{figure}
+    \centering
+    \begin{center}
+      \includegraphics[width=0.5\textwidth]{SQL-MR-SQL}
+    \end{center}    
+    \caption{   SELECT YEAR(saleDate), SUM(revenue) FROM sales GROUP BY YEAR(saleDate);
+    }
+  \end{figure}
+\end{frame}
+
+\section{Evaluation}
+\label{sec:evaluation}
+
+% \subsection{Hypotheses}
+
+\begin{frame}
+  \frametitle{Evaluating HadoopDB against Hadoop and Parellel Databases}
+  Compare HadoopDB to Hadoop and Parallel databases:
+  \begin{itemize}
+  \item Performance:
+    \begin{itemize}
+    \item HadoopDB is expected to approach the performance of
+      parallel databases
+    \item Load times vs. performance trade-offs
+    \end{itemize}
+  \item Scalability:
+    \begin{itemize}
+    \item HadoopDB is expected to scale as well as Hadoop
+    \item Fault- and fluctuation- tolerance
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Setup}
+
+\begin{frame}
+  \frametitle{Experimental Setup}
+  \begin{itemize}
+  \item Stage
+    \begin{itemize}
+    \item Amazon EC2 cloud, clusters of 10, 50, 100 machines
+    \end{itemize}
+  \item Character
+    \begin{itemize}
+    \item Hadoop
+    \item HadoopDB
+    \item Vertica
+    \item DB-X\footnote{\small{DB-X results reproduced from Pavlo et al. 2009}}%CITE
+   \end{itemize}
+  \item Plot
+    \begin{itemize}
+    \item Pavlo et al. SIGMOD benchmark of large-scale analytical
+      queries derived from processing web-data
+    \item 20+ GB/node
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Load}
+
+\begin{frame}
+  \frametitle{Load: Grep Data}
+  \begin{figure}
+    \centering
+    \begin{center}
+      \includegraphics[width=0.6\textwidth]{Load-GrepData}
+    \end{center}
+    \caption{Grep Data (535MB/node): No pre-processing, data randomly generated}
+    \label{fig:load-grep-data}
+  \end{figure}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Load: User Visits Log}
+  \begin{figure}
+    \centering
+    \begin{center}
+      \includegraphics[width=0.6\textwidth]{Load-UserVisitLogs}
+    \end{center}
+    \caption{User Visits Log (20GB/node): Partitioning, chunking (1GB chunks), sorting and indexing}
+    \label{fig:load-user-visit-log}
+  \end{figure}
+\end{frame}
+
+
+\subsection{Performance}
+
+\begin{frame}
+  \frametitle{Performance: Grep Task}
+  \begin{figure}
+    \centering
+    \begin{center}
+      \includegraphics[width=0.6\textwidth]{Performance-Grep-Task}
+    \end{center}
+    % \caption{SELECT * FROM grep WHERE field LIKE ‘\%xyz\%’;}
+ \end{figure}
+ % \begin{itemize}
+ % \item Full table scan, highly selective filter
+ % \item Random data, no room for indexing
+ % \item Hadoop overhead outweighs query processing time in single-node databases
+ % \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Performance: Join Task}
+    \begin{figure}
+    \centering
+    \begin{center}
+      \includegraphics[width=0.5\textwidth]{Performance-Joint-Task}
+    \end{center}
+    \caption{\ttfamily{SELECT sourceIP, AVG(pageRank), SUM(adRevenue)
+FROM rankings, uservisits
+WHERE pageURL=destURL
+AND visitDate BETWEEN 2000-1-15 AND 2000-1-22
+GROUP BY sourceIP
+ORDER BY SUM(adRevenue) DESC LIMIT 1;}}
+ \end{figure}
+
+% No full table scan due
+% to clustered indexing
+% 2 Hash partitioning and
+% efficient join
+% algorithm
+% 3 Partial aggregation
+% pushed into DB layer
+\end{frame}
+
+\begin{frame}
+  \frametitle{Performance: Bottom Line}
+  \begin{itemize}
+  \item Unstructured data
+    \begin{itemize}
+    \item HadoopDB’s performance matches Hadoop
+    \end{itemize}
+  \end{itemize}
+  
+  \begin{itemize}
+  \item Structured data
+    \begin{itemize}
+    \item HadoopDB’s performance is close to parallel databases
+    \end{itemize}
+  \end{itemize}
+\end{frame}
+
+\subsection{Scalability}
+
+\begin{frame}
+  \frametitle{Scalability: Setup}
+  \begin{itemize}
+  \item Simple aggregation task - full table scan
+  \item Data replicated across 10 nodes
+  \item Fault-tolerance: Kill a node halfway
+  \item Fluctuation-tolerance: Slow down a node for the entire
+    experiment
+  \end{itemize}
+
+  \begin{block}{Key differences}
+    \begin{itemize}
+    \item HadoopDB and Hadoop take advantage of runtime scheduling
+      by splitting data into chunks or blocks
+    \item Parallel databases restart wait for the slowest node
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Scalability: Results}
+  \begin{itemize}
+  \item Run-time scheduling Block-level vs. Query-level restart
+   \item Frequent checkpointing vs. pipelining results
+  \end{itemize}
+      \begin{center}
+      \includegraphics[width=0.6\textwidth]{Scalability-Result}
+    \end{center}
+
+\end{frame}
 
 % \frame{
 
@@ -377,12 +696,44 @@
 %   \end{block}
 % }
 
-\section{Future Research}
-\label{sec:future-research}
-
-
 \section{Conclusion}
 \label{sec:conclusion}
+
+\subsection{Summary and Future Works}
+\begin{frame}
+  \frametitle{To Summarize}
+  \begin{block}{HadoopDB ...}
+    \begin{itemize}
+    \item is a hybrid of DBMS and MapReduce
+    \item scales better than commercial parallel databases
+    \item is as fault-tolerant as Hadoop
+    \item approaches the performance of parallel databases
+    \item is free and open-source
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+% \subsection{Future}
+
+\begin{frame}
+  \frametitle{Future Work}
+  Engineering Work:
+  \begin{itemize}
+  \item Full SQL support in SMS 
+  \item Data compression
+  \item Integration with other open source databases
+  \item Full automation of the loading and replication process
+  \item Out-of-the box deployment
+  \end{itemize}
+  Research Work:
+  \begin{itemize}
+  \item Incremental loading and on-the-fly repartitioning
+  \item Dynamically adjusting fault-tolerance levels based on failure
+    rate
+  \end{itemize}
+
+\end{frame}
+
 
 % \frame{
 %   \frametitle{Conclusion}
@@ -395,7 +746,7 @@
 \frame{
   \frametitle{Thank You}
   \begin{center}
-    \large{Questions \& Answers}
+    \LARGE{Questions \& Answers}
   \end{center}
 }
 
