@@ -28,11 +28,19 @@
 % \setbeamertemplate{background}{\includegraphics[width=1\textwidth]{natfak_baggrund.pdf}}
 % \logo{\includegraphics[width=1cm]{billeder/logo}}
 
-\title{High Performance Query Execution in Analytical Databases over a Scalable Heterogeneous Distributed Environment with Fault Tolerance}
-% \subtitle{}
-\author{Abu Zaher Md. Faridee\\  Samir Hasan \\ Wasik Mursalin Rushafi}
+\title{High Performance Query Execution in Analytical Databases over a
+  Scalable Heterogeneous Distributed Environment with Fault Tolerance}
+ % \subtitle{Presentation for the Course: High Dimensional Data Management}
+\author{Abu Zaher Md. Faridee 
+% (0411052040) 
+\\  Samir Hasan
+  % (0411052067)
+\\ Wasik Mursalin Rushafi 
+% (0411052065)
+}
 \institute{Department of Computer Science\\Bangladesh University of
   Engineering and Technology} \date{\today{}}
+% Presentation for the Course: High Dimensional Data Management
 
 \begin{document}
 
@@ -61,14 +69,17 @@
 % \subsection{The Longest Path Problem}
 % \label{sec:problem-definition}
 
-\subsection{Problem Definition}
+\subsection*{Problem Definition}
 \label{sec:problem-definition}
 
 \begin{frame}
   \frametitle{Problem Definition}
-  Given explosive amounts of data, design an analytical database
+  % \begin{block}{}
+      Given explosive amounts of data, design an analytical database
   system that features performance, scalability, fault tolerance and
   a flexible query interface
+
+  % \end{block}
 \end{frame}
 
 % \frame{
@@ -162,6 +173,7 @@
   \end{itemize}
 \end{frame}
 
+\subsection{Main Challenges}
 \begin{frame}
   \frametitle{Desired properties of a Data Analysis System in the
     Petabyte Scale}
@@ -300,22 +312,65 @@
     \end{center}
 \end{frame}
 
-\begin{frame}
-  \frametitle{Architecture}
-      \begin{center}
-      \includegraphics[width=0.7\textwidth]{Architecture}
-    \end{center}
-\end{frame}
-
 \subsection{HadoopDB's Components}
 \begin{frame}
-  \frametitle{Components}
+  \frametitle{HadoopDB's Components}
   \begin{itemize}
   \item Database Connector
   \item Catalog
   \item Data Loader
   \item SQL to MapReduce to SQL (SMS) Planner
   \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{HadoopDB's  Architecture}
+      \begin{center}
+      \includegraphics[width=0.7\textwidth]{Architecture}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Database Connector}
+  \begin{itemize}
+  \item Interface between independent database systems residing on nodes in the cluster and TaskTrackers.
+  \item Extends Hadoop’s InputFormat class and is part of the Input- Format Implementations library
+  \item Connects to the database, executes the SQL query and returns
+    results as key-value pairs
+    \item By extending Hadoop’s InputFormat, seamless integration with
+      Hadoop’s MapReduce Framework is ensured
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Catalog}
+  \emph Responsible for maintaining metainformation about
+  the databases e.g.
+  \begin{itemize}
+  \item Connection parameters such as database location, driver class and credentials
+  \item Metadata such as data sets contained in the cluster, replica locations, and data partitioning properties
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Data Loader}
+  Responsible for
+  \begin{itemize}
+  \item Globally repartitioning data on a given partition key upon
+    loading
+  \item Breaking apart single node data into multiple smaller
+    partitions or chunks
+  \item Bulk-loading the single-node databases with the chunks
+  \end{itemize}
+Consists of two components
+\begin{itemize}
+\item The Global Hasher executes a custom- made MapReduce job over
+  Hadoop that reads in raw data files stored in HDFS and repartitions
+  them into as many parts as the number of nodes in the cluster
+\item The Local Hasher copies a partition from HDFS into local file system of each node and secondarily partitions the file into smaller sized chunks based on the maximum chunk size setting
+\end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -330,8 +385,24 @@
   \end{itemize}
 \end{frame}
 
+
 \begin{frame}
-  \frametitle{SQL-MR-SQL}
+  \frametitle{SQL-MR-SQL (SMS): Exteding Hive}
+  SMS Planner Extends hive in following ways:
+  \begin{itemize}
+  \item Before any query execution updates the MetaStore with references to database tables
+  \item After the physical query plan generation and before the
+    execution of the MapReduce jobs, SMS perform two passes over the
+    physical plan.
+  \item In the first pass, SMS retrieves data fields that are actually
+    processed by the plan and determines the partitioning keys used by
+    the Reduce Sink (Repartition) operators.
+  \item In the second pass, SMS traverse the DAG bottom-up from table scan operators to the output or File Sink operator
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SQL-MR-SQL Review}
   \begin{figure}
     \centering
     \begin{center}
@@ -742,6 +813,27 @@ ORDER BY SUM(adRevenue) DESC LIMIT 1;}}
 %     performs way better than GA.
 %   \end{itemize}
 % }
+
+\begin{frame}
+  \frametitle{References}
+  \begin{enumerate}
+{\small{
+  \item A. Abouzeid, K. Bajda-Pawlikowski, D. Abadi, A. Silberschatz, and A. Rasin. HadoopDB: An Architectural Hybrid of MapReduce and
+    DBMS Technologies for Analytical Workloads. PVLDB, 2009.
+  \item J. Dean and S. Ghemawat. MapReduce: Simplified Data Processing
+    on Large Clusters. In OSDI, 2004.
+  \item Michael Stonebraker, Daniel Abadi, David J. Dewitt, Sam Madden,
+    Erik Paulson, Andrew Pavio, And Alexander Rasin, MapReduce and
+    Parallel DBMSs -  Friends or Foes, Communications of ACM, 2011
+    \item Kamil Bajda-Pawlikowski, Daniel J. Abadi, Avi Silberschatz,
+      Erik Paulson. Efficient Processing of Data Warehousing Queries
+      in a Split Execution Environment. VLDB, 2009
+      \item Andrew Pavlo, 
+Erik Paulson, Daniel J. Abadi, David J. DeWitt, Samuel Madden, Michael
+Stonebraker. A Comparison of Approaches to Large-Scale Data
+Analysis. CLUE 2010.}}
+  \end{enumerate}
+\end{frame}
 
 \frame{
   \frametitle{Thank You}
